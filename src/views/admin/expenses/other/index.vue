@@ -1,0 +1,946 @@
+<template>
+  <div class="invoice-page loan-page">
+    <section class="invoice-preview-wrapper">
+
+      <b-card no-body class="main-card shadow-sm border-0">
+
+        <!-- FILTER AREA -->
+        <div class=" filter-area">
+
+          <b-row class="align-items-center">
+
+            <b-col cols="12" xl="7" class="mb-1">
+
+              <h4 class="d-md-none d-lg-none">Date Range - {{ rangeDate }}</h4>
+
+              <div class="action-card  d-flex align-items-center">
+                <div class="mr-1">
+                  <b-form-group class="">
+
+                    <flat-pickr v-model="rangeDate" class="form-control date-picker mt-1" :config="dateConfig" />
+                  </b-form-group>
+                </div>
+              </div>
+            </b-col>
+            <b-col cols="12" xl="5" class="action-card mb-1">
+              <div class="d-flex align-items-center justify-content-end">
+                <b-button class="ml-2 modern-btn mr-1 mt-md-0" variant="primary" @click="loadExpenses">
+                  <feather-icon icon="RefreshCwIcon" size="16" class="mr-50" />
+
+                  Refresh 
+                </b-button>
+                <b-button class="ml-1 modern-btn single-line-text" @click="printInvoice">
+                  <span class="align-middle">
+                    Print
+                  </span>
+                </b-button>
+
+              </div>
+
+            </b-col>
+
+          </b-row>
+        </div>
+        <div class="invoice-card">
+
+
+          <!-- COMPANY -->
+          <b-card no-body class="loan-card border-0 shadow-sm mb-2">
+
+            <!-- COLLAPSIBLE HEADER -->
+            <div class="card-header-custom other-header d-flex justify-content-between align-items-center"
+               style="cursor:pointer;">
+              <span>Other Expenses</span>
+
+            </div>
+
+
+              <b-overlay :show="tableLoading" rounded="sm">
+
+                <div class="table-wrapper">
+
+                 <b-table
+  :items="others_expenses"
+  :fields="companyFields"
+  responsive
+  hover
+  small
+  sticky-header="500px"
+  head-variant="light"
+  class="modern-table">
+
+  <!-- TYPE -->
+  <template #cell(expense_name)="data">
+
+    <div
+      :class="[
+        data.item.expense_name === 'TOTAL'
+          ? 'total-text'
+          : 'normal-text'
+      ]">
+
+      {{ data.item.expense_name }}
+
+    </div>
+
+  </template>
+
+  <!-- CASH -->
+  <template #cell(cash)="data">
+
+    <div
+      :class="[
+        data.item.expense_name === 'TOTAL'
+          ? 'total-amount'
+          : ''
+      ]">
+
+      {{ data.item.cash }}
+
+    </div>
+
+  </template>
+
+  <!-- CARD -->
+  <template #cell(bank)="data">
+
+    <div
+      :class="[
+        data.item.expense_name === 'TOTAL'
+          ? 'total-amount'
+          : ''
+      ]">
+
+      {{ data.item.bank }}
+
+    </div>
+
+  </template>
+
+  <!-- AMOUNT -->
+  <template #cell(amount)="data">
+
+    <div
+      :class="[
+        data.item.expense_name === 'TOTAL'
+          ? 'grand-total'
+          : 'expense-amount'
+      ]">
+
+      {{ data.item.amount }}
+
+    </div>
+
+  </template>
+
+  <!-- RECORDS -->
+  <template #cell(record)="data">
+
+    <div
+      :class="[
+        data.item.expense_name === 'TOTAL'
+          ? 'total-records'
+          : ''
+      ]">
+
+      {{ data.item.record }}
+
+    </div>
+
+  </template>
+
+  <!-- ROW STYLE -->
+  <template #row-class="item">
+
+    {{ item.expense_name === 'TOTAL'
+      ? 'total-row'
+      : ''
+    }}
+
+  </template>
+
+</b-table>
+
+                </div>
+
+              </b-overlay>
+
+              <div v-if="others_expenses.length == 0" class="empty-state">
+                No Other Expenses
+              </div>
+
+
+          </b-card>
+        </div>
+
+      </b-card>
+    </section>
+  </div>
+</template>
+
+<script>
+import {
+  BModal,
+  BCard,
+  BRow,
+  BCol,
+  BTable,
+  BOverlay,
+  BButton,
+  BFormInput,
+  BFormGroup,
+} from 'bootstrap-vue'
+
+import flatPickr from 'vue-flatpickr-component';
+import vSelect from 'vue-select'
+import admin from '@/apis/modules/admin'
+
+export default {
+
+  components: {
+    BModal,
+    BFormGroup,
+    BCard,
+    BRow,
+    BCol,
+    BTable,
+    BOverlay,
+    BButton,
+    BFormInput,
+    vSelect,
+    flatPickr,
+  },
+
+  data() {
+
+    let today = new Date();
+    let last_date = new Date();
+    today.setDate(today.getDate() - 1);
+    last_date.setDate(today.getDate() - 6);
+    return {
+
+      userData: JSON.parse(localStorage.getItem('userData')),
+      expense_id: '',
+      expenses_groups: [],
+      staff_groups: [],
+      vehicle_groups: [],
+
+      cashier_id: '',
+      category_id: '',
+      sub_category_id: '',
+      note: '',
+
+      staff_id: '',
+      vehicle_id: '',
+      expenses_type_id: '',
+      cash: 0,
+      bank: 0,
+      amount: 0,
+
+      tableLoading: false,
+
+      search: '',
+
+      rangeDate: new Date().toISOString().split('T')[0],
+
+      others_expenses: [],
+      // staff_expenses: [],
+      // vehicle_expenses: [],
+      // other_expenses: [],
+
+      companyFields: [
+        { key: 'expense_name', label: 'type' },
+        { key: 'cash', label: 'Cash' },
+        { key: 'bank', label: 'Card' },
+        { key: 'amount', label: 'Expense' },
+        { key: 'record', label: 'Records' },
+      ],
+
+      // staffFields: [
+      //   { key: 'expense_name', label: 'type' },
+      //   { key: 'cashier_name', label: 'cashier' },
+      //   { key: 'users_user_name', label: 'Staff Member' },
+      //   { key: 'note', label: 'note' },
+      //   { key: 'cash', label: 'Cash' },
+      //   { key: 'bank', label: 'Card' },
+      //   { key: 'amount', label: 'Expense' },
+      //   { key: 'date', label: 'Date' },
+      // ],
+
+      // vehicleFields: [
+      //   { key: 'expense_name', label: 'type' },
+      //   { key: 'cashier_name', label: 'cashier' },
+      //   { key: 'users_user_name', label: 'Vehicle Number' },
+      //   { key: 'note', label: 'note' },
+      //   { key: 'cash', label: 'Cash' },
+      //   { key: 'bank', label: 'Card' },
+      //   { key: 'amount', label: 'Expense' },
+      //   { key: 'date', label: 'Date' },
+      // ],
+
+      // otherFields: [
+      //   { key: 'expense_name', label: 'type' },
+      //   { key: 'cashier_name', label: 'cashier' },
+      //   { key: 'note', label: 'note' },
+      //   { key: 'cash', label: 'Cash' },
+      //   { key: 'bank', label: 'Card' },
+      //   { key: 'amount', label: 'Expense' },
+      //   { key: 'date', label: 'Date' },
+      // ],
+
+
+      dateConfig: {
+        mode: 'range',
+        dateFormat: 'Y-m-d',
+        allowInput: true,
+        minDate: new Date(
+          new Date().setDate(new Date().getDate() - 90)
+        ).toISOString().split('T')[0],
+
+        maxDate: new Date().toISOString().split('T')[0],
+
+        onClose: function (selectedDates, dateStr, instance) {
+
+          if (selectedDates.length === 1) {
+
+            const sameDate = selectedDates[0]
+
+            instance.setDate([sameDate, sameDate], true)
+          }
+        }
+      },
+
+
+    }
+  },
+
+  watch: {
+    rangeDate(newVal) {
+      if (!newVal || newVal.length === 0) return
+      this.dateAdd()
+    }
+  },
+
+  methods: {
+    printInvoice() {
+      window.print();
+    },
+
+
+
+    async loadExpenses() {
+
+      try {
+
+        this.tableLoading = true
+
+        let startDate, endDate
+
+        if (this.rangeDate.includes(' to ')) {
+
+          [startDate, endDate] = this.rangeDate.split(' to ')
+
+        } else {
+
+          startDate = endDate = this.rangeDate
+        }
+
+        const formattedStartDate = new Date(startDate)
+          .toISOString()
+          .split('T')[0]
+
+        const formattedEndDate = new Date(endDate)
+          .toISOString()
+          .split('T')[0]
+
+        const payload = {
+
+          start_date: formattedStartDate,
+
+          end_date: formattedEndDate,
+
+          search: this.search,
+        }
+
+        const response = await admin.getOtherExpenses(payload)
+
+        /*
+        |--------------------------------------------------------------------------
+        | Other Expenses
+        |--------------------------------------------------------------------------
+        */
+
+        this.others_expenses = response.data.other_expenses.map(x => ({
+
+          id: x.id,
+
+          expense_name: x.expense_name,
+
+          amount: `Rs ${Number(x.total_amount).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+            })}`,
+
+            cash: `Rs ${Number(x.total_cash).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+            })}`,
+
+            bank: `Rs ${Number(x.total_bank).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+            })}`,
+
+          record: x.total_records,
+
+        }))
+
+      } catch (error) {
+
+        console.log(error)
+
+      } finally {
+
+        this.tableLoading = false
+      }
+    },
+
+
+
+  },
+
+  mounted() {
+    this.loadExpenses()
+  },
+
+}
+</script>
+
+
+<style scoped>
+
+.modern-table {
+  border-radius: 14px;
+  overflow: hidden;
+  font-size: 14px;
+}
+
+.modern-table thead th {
+  background: linear-gradient(45deg, #0b6eca, #1f8fff) !important;
+  color: white !important;
+  border: none !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.modern-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.modern-table tbody tr:hover {
+  background: #f4f8ff !important;
+}
+
+.expense-amount {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.normal-text {
+  font-weight: 500;
+}
+
+/* TOTAL ROW */
+
+.total-row {
+  background: linear-gradient(45deg, #0b6eca, #1f8fff) !important;
+}
+
+.total-row td {
+  color: white !important;
+  font-weight: 700 !important;
+  border-top: 2px solid #0a58ca !important;
+  font-size: 15px;
+}
+
+.total-text {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.total-amount {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.grand-total {
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.total-records {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+/* CARD */
+
+.loan-card {
+  border-radius: 18px !important;
+  overflow: hidden;
+}
+
+.card-header-custom {
+  background: linear-gradient(45deg, #0b6eca, #1f8fff);
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 14px 20px;
+}
+
+.table-wrapper {
+  padding: 10px;
+}
+
+
+
+.modern-btn {
+  background: linear-gradient(135deg, #4e73df, #224abe);
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.modern-search {
+  border-radius: 12px;
+  padding: 8px;
+  background: transparent !important;
+  box-shadow: none !important;
+  height: 36px;
+  font-weight: 500;
+}
+
+.modern-search:focus {
+  outline: none !important;
+}
+
+
+.invoice-page {
+  background: #f4f7fb;
+  min-height: 100vh;
+  padding: 25px;
+}
+
+.invoice-card {
+  border-radius: 18px;
+  overflow: hidden;
+  border: none;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.invoice-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  flex-wrap: wrap;
+}
+
+
+.modern-search {
+  border-radius: 12px;
+  padding: 8px;
+  background: transparent !important;
+  box-shadow: none !important;
+  height: 36px;
+  font-weight: 500;
+}
+
+.modern-search:focus {
+  outline: none !important;
+}
+
+.loan-page {
+  background: #f8f9fc;
+  min-height: 100vh;
+  padding: 10px;
+}
+
+.main-card {
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.filter-area {
+  background: white;
+  padding: 18px;
+  border-bottom: 1px solid #ebeef5;
+}
+
+.per-page-selector {
+  min-width: 90px;
+}
+
+.search-box {
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 11px;
+  color: #999;
+  z-index: 10;
+}
+
+.search-input {
+  padding-left: 35px;
+  border-radius: 8px;
+  min-width: 220px;
+}
+
+.date-picker {
+  min-width: 240px;
+  border-radius: 8px;
+}
+
+.refresh-btn {
+  border-radius: 8px;
+  padding-left: 18px;
+  padding-right: 18px;
+  font-weight: 600;
+}
+
+.loan-card {
+  border-radius: 14px;
+  overflow: hidden;
+  transition: 0.3s;
+  background: white;
+}
+
+.loan-card:hover {
+  transform: translateY(-2px);
+}
+
+.card-header-custom {
+  padding: 14px 18px;
+  font-weight: 700;
+  font-size: 15px;
+  color: white;
+}
+
+
+.other-header {
+  background: linear-gradient(45deg, #436fff, #436fff);
+}
+
+.table-wrapper {
+  padding: 10px;
+}
+
+.modern-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #f8f8f8 !important;
+  font-size: 13px;
+}
+
+.modern-table td {
+  vertical-align: middle;
+  font-size: 13px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 25px;
+  color: #999;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+
+  .search-input,
+  .date-picker {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .refresh-btn {
+    width: 100%;
+  }
+}
+</style>
+<style lang="scss">
+@import '@core/scss/vue/libs/vue-flatpicker.scss';
+</style>
+<style lang="scss">
+@import "@core/scss/vue/libs/vue-select.scss";
+
+
+.swal2-popup {
+  border-radius: 16px !important;
+  padding: 22px !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  font-family: inherit;
+}
+
+/* Title */
+.swal2-title {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #2c3e50;
+}
+
+/* Text */
+.swal2-html-container {
+  font-size: 14px !important;
+  color: #6c757d;
+}
+
+/* Confirm (Delete) button */
+.swal2-popup .btn-primary {
+  background: linear-gradient(135deg, #4e73df, #224abe);
+  border-radius: 10px !important;
+  font-weight: 600;
+  padding: 8px 16px;
+  transition: 0.25s ease;
+}
+
+.swal2-popup .btn-primary:hover {
+  background: #bb2d3b !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(220, 53, 69, 0.25);
+}
+
+/* Cancel button */
+.swal2-popup .btn-outline-danger {
+  border-radius: 10px !important;
+  font-weight: 600;
+  padding: 8px 16px;
+  color: #dc3545 !important;
+  border: 1px solid #dc3545 !important;
+  background: transparent !important;
+  transition: 0.25s ease;
+}
+
+.swal2-popup .btn-outline-danger:hover {
+  background: #dc3545 !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+/* Optional icon animation */
+.swal2-icon.swal2-warning {
+  border-color: #ffc107 !important;
+  color: #ffc107 !important;
+}
+
+.invoice-page {
+  background: #f4f7fb;
+  min-height: 100vh;
+  padding: 25px;
+}
+
+.invoice-card {
+  border-radius: 18px;
+  overflow: hidden;
+  border: none;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.invoice-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  flex-wrap: wrap;
+}
+
+.company-section {
+  display: flex;
+  align-items: center;
+}
+
+.company-logo {
+  width: 90px;
+  margin-right: 20px;
+}
+
+.company-sub {
+  font-size: 18px;
+  font-weight: 600;
+  color: #444;
+}
+
+.company-sub-si {
+  font-size: 16px;
+  color: #666;
+}
+
+.invoice-meta {
+  text-align: right;
+}
+
+.meta-box {
+  margin-bottom: 12px;
+}
+
+.meta-label {
+  display: block;
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 3px;
+}
+
+.meta-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111;
+}
+
+.top-line {
+  height: 5px;
+  background: linear-gradient(to right,
+      #0b6eca,
+      #1f8fff);
+}
+
+.table-wrapper {
+  padding: 25px;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.invoice-table thead tr {
+  background: #0b6eca;
+}
+
+.invoice-table thead th {
+  color: white;
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.invoice-table tbody td {
+  padding: 15px;
+  border-bottom: 1px solid #e9edf3;
+  font-size: 15px;
+}
+
+.invoice-table tbody tr:nth-child(even) {
+  background: #f9fbff;
+}
+
+.item-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #222;
+}
+
+.qty {
+  font-weight: bold;
+  color: #0b6eca;
+}
+
+.empty-text {
+  text-align: center;
+  padding: 40px !important;
+  color: #999;
+}
+
+.invoice-footer {
+  border-top: 1px solid #eee;
+  padding: 20px 25px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background: #fafcff;
+}
+
+.software-text {
+  color: #777;
+  font-style: italic;
+}
+
+.action-card {
+  border: none;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.action-title {
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #0b6eca;
+}
+
+.action-btn {
+  height: 45px;
+  font-weight: 600;
+  border-radius: 10px;
+  margin-top: 12px;
+}
+
+.custom-v-select .vs__dropdown-toggle {
+  min-height: 45px;
+  border-radius: 10px;
+}
+
+@media(max-width: 768px) {
+
+  .invoice-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .invoice-meta {
+    text-align: left;
+    margin-top: 20px;
+  }
+
+}
+
+@media print {
+
+  body {
+    background: white !important;
+  }
+
+  .action-card,
+  nav,
+  footer,
+  .main-menu,
+  .header-navbar,
+  .customizer-toggle {
+    display: none !important;
+  }
+
+  .invoice-page {
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  .invoice-card {
+    box-shadow: none !important;
+  }
+
+  .table-wrapper {
+    padding: 0 20px 20px 20px;
+  }
+
+  .invoice-table thead tr {
+    background: #0b6eca !important;
+    -webkit-print-color-adjust: exact;
+  }
+
+}
+</style>

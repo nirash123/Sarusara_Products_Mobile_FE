@@ -1,0 +1,39 @@
+/* Breakpoints */
+
+/* for large breakpoints */
+$break-min-xl: "screen and (min-width: 1600px)";
+$break-min-lg: "screen and (min-width: 1200px)";
+$break-min-md: "screen and (min-width: 992px)";
+$break-min-sm: "screen and (min-width: 768px)";
+$break-min-xs: "screen and (min-width: 480px)";
+
+/* for common breakpoints */
+$break-xl: "screen and (max-width: 1599px)";
+$break-lg-xl: "(min-width: 1200px) and (max-width: 1599px)";
+$break-md-lg: "(min-width: 992px) and (max-width: 1199px)";
+$break-sm-md: "(min-width: 768px) and (max-width: 991px)";
+$break-xs-sm: "(min-width: 480px) and (max-width: 767px)";
+$break-sm-xl: "(min-width: 768px) and (max-width: 1599px)";
+
+
+$break-mid: "screen and (max-width: 1199px)";
+$break-md: "screen and (max-width: 991px)";
+$break-sm: "screen and (max-width: 767px)";
+$break-xs: "screen and (max-width: 480px)";
+$break-xxs: "screen and (max-width: 400px)";
+$break-xxxs: "screen and (max-width: 375px)";
+
+
+/* special landscape devices */
+$break-sp-1: "only screen and (min-device-width: 375px) and (max-device-width: 900px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: landscape)";
+
+$break-sp-2: "only screen and (min-device-width: 375px) and (max-device-width: 900px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: landscape)";
+
+
+
+
+
+
+
+
+
