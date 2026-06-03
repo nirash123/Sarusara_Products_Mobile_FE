@@ -1,9 +1,5 @@
 <template>
-  <div class="invoice-page">
-
-    <b-card>
-
-      <b-tabs class="my-1">
+      <b-tabs>
 
         <!-- ALL EXPENSES -->
         <b-tab lazy :active="activeTab === '1'">
@@ -61,10 +57,6 @@
         </b-tab>
 
       </b-tabs>
-
-    </b-card>
-
-  </div>
 </template>
 
 <script>
@@ -112,8 +104,6 @@ export default {
 
       currentTime: '',
       currentDate: '',
-
-      userData: JSON.parse(localStorage.getItem('userData')),
 
       activeTab: null,
     }

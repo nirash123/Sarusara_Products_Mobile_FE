@@ -24,67 +24,13 @@
           <b-col cols="12" md="7">
             <div class="d-flex align-items-center justify-content-end">
               <b-form-input v-model="filters['name_or_email']" class="d-inline-block modern-search mr-1" placeholder="🔍 Search categories..." />
-              <b-button class="modern-btn single-line-text"  id="toggle-btn-price"
-                 v-b-modal.modal-prevent-closing-price>
-                <span class="align-middle"> Add Employee</span>
-              </b-button>
-              <b-modal size="lg" id="modal-prevent-closing-price" centered ref="my-modal-price" title="Add New Employee"
-                ok-title="Submit" cancel-variant="outline-secondary" @show="resetModalPrice" @hidden="resetModalPrice"
-                @ok="handleOkPrice">
-                <form ref="form" @submit.stop.prevent="handleSubmitPrice">
-
-                  <b-col sm="12" md="12">
-                    <b-form-group label="User Code" label-for="user_code" invalid-feedback="User code required">
-                      <b-form-input ref="codeInput" id="user_code" v-model="user_code" :state="user_code_status"
-                        placeholder="Enter user code" required />
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col sm="12" md="12">
-                    <b-form-group label="User Name" label-for="user_name" invalid-feedback="User name required">
-                      <b-form-input ref="codeInput" id="user_name" v-model="user_name" :state="user_name_status"
-                        placeholder="Enter user name" required />
-                    </b-form-group>
-                  </b-col>
-
-
-
-                  <b-col sm="12" md="12">
-                    <b-form-group label="First Name" label-for="first_name" invalid-feedback="First name is required">
-                      <b-form-input id="first_name" v-model="first_name" :state="first_name_status"
-                        placeholder="Enter first name" />
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col sm="12" md="12">
-                    <b-form-group label="Last Name" label-for="last_name" invalid-feedback="Last name is required">
-                      <b-form-input id="last_name" v-model="last_name" :state="last_name_status"
-                        placeholder="Enter last name" />
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col sm="12" md="12">
-                    <b-form-group label="Address" label-for="address" invalid-feedback="Address is required">
-                      <b-form-input id="address" v-model="address" :state="address_status"
-                        placeholder="Enter Address" />
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col sm="12" md="12">
-                    <b-form-group label="Mobile Number" label-for="phone" invalid-feedback="Mobile Number is required">
-                      <b-form-input id="phone" v-model="phone_no" :state="phone_no_status"
-                        placeholder="Enter mobile number" />
-                    </b-form-group>
-                  </b-col>
-                </form>
-              </b-modal>
             </div>
           </b-col>
         </b-row>
 
       </div>
 
-      <b-row class="m-2">
+      <b-row class="my-2">
         <b-col cols="12">
           <b-overlay :show="tableLoading" rounded="sm">
             <b-table ref="table" :current-page="currentPage" :fields="fields" :items="getUsers"
@@ -94,23 +40,15 @@
 
               <template #cell(user_name)="data">
                 <b-media vertical-align="center">
-                  <b-row class="align-items-center">
+                  <b-row style="width: 350px !important" class="align-items-center">
                     <b-col cols="auto">
-                      <b-avatar size="40" :src="imageUrl + data.item.image"
-                        :to="{ name: 'view-staff-details', params: { id: data.item.id } }" />
+                      <b-avatar size="40" :src="imageUrl + data.item.image" />
                     </b-col>
                     <b-col>
-                      <b-link :to="{ name: 'view-staff-details', params: { id: data.item.id } }"
-                        class="font-weight-bold d-block text-nowrap">
                         {{ data.item.full_name }}
-                      </b-link>
-                      <small>{{ data.item.user_code }} @{{ data.item.user_name }}</small>
-                    </b-col>
-                  </b-row>
-                </b-media>
-              </template>
-
-              <template #cell(admin_role)="data">
+                      <div>{{ data.item.user_code }} @{{ data.item.user_name }}</div>
+                      <div>{{ data.item.address }}</div>
+                      <div>{{ data.item.phone_no }} </div>
                 <!-- Admin (ID = 1) -->
                 <div v-if="data.item.admin_role == 'TBSAdmin' && data.item.id == 1" class="text-nowrap">
                   <feather-icon icon="ServerIcon" size="18" class="mr-50 text-green" />
@@ -146,43 +84,25 @@
                   <feather-icon icon="TruckIcon" size="18" class="mr-50 text-danger" />
                   <span class="align-text-top text-capitalize">Driver</span>
                 </div>
+                    </b-col>
+                  </b-row>
+                </b-media>
               </template>
 
-              <template #cell(active_status)="data">
-                <b-badge v-if="data.item.active_status == '1'" class="ml-1" style="padding: 8px"
-                  variant="light-success">
-                  Active
-                </b-badge>
-                <b-badge v-if="data.item.active_status == '2'" class="ml-1" style="padding: 8px"
-                  variant="light-warning">
-                  InActive
-                </b-badge>
+               <template #cell(payment)="data">
+                <b-media vertical-align="center">
+                  <b-row class="align-items-center">
+                    <b-col>
+                        {{ data.item.a_shift }}
+                      <div>{{ data.item.b_shift }}</div>
+                      <div>{{ data.item.c_shift }}</div>
+              
+                    </b-col>
+                  </b-row>
+                </b-media>
               </template>
 
-              <!-- Column: Actions -->
-              <template #cell(actions)="data">
-                <b-dropdown variant="link" no-caret :right="$store.state.appConfig.isRTL">
-
-                  <template #button-content>
-                    <feather-icon icon="MoreVerticalIcon" size="16" class="align-middle text-body" />
-                  </template>
-                  <b-dropdown-item :to="{ name: 'view-staff-details', params: { id: data.item.id } }">
-                    <feather-icon icon="FileTextIcon" />
-                    <span class="align-middle ml-50">Details</span>
-                  </b-dropdown-item>
-
-                  <b-dropdown-item :to="{ name: 'edit-staff-details', params: { id: data.item.id } }">
-                    <feather-icon icon="EditIcon" />
-                    <span class="align-middle ml-50">Edit</span>
-                  </b-dropdown-item>
-                  <b-dropdown-item @click="deleteStaff(data.item.id)">
-                    <feather-icon icon="TrashIcon"  />
-                    <span class="align-middle ml-50">Delete</span>
-                  </b-dropdown-item>
-                </b-dropdown>
-              </template>
-
-
+            
             </b-table>
           </b-overlay>
         </b-col>
@@ -226,9 +146,6 @@
         </b-col>
       </b-row>
     </b-card>
-     <div>
-      <staff-payments />
-    </div>
   </div>
 </template>
 
@@ -276,8 +193,6 @@ import Filter from "@/mixins/FilterMixin";
 import { mapGetters } from "vuex";
 import staff from "@/apis/modules/staff";
 import { avatarText } from '@core/utils/filter'
-import { DatabaseIcon } from "vue-feather-icons";
-import StaffPayments from "./payment.vue";
 
 export default {
   components: {
@@ -316,7 +231,6 @@ export default {
     avatarText,
     ValidationProvider,
     ValidationObserver,
-    StaffPayments,
   },
   directives: {
     Ripple,
@@ -391,25 +305,8 @@ export default {
           sortable: true,
         },
         {
-          key: "address",
-          label: "address",
-        },
-        {
-          key: "phone_no",
-          label: "mobile number",
-        },
-        {
-          key: "admin_role",
-          label: "role",
-          sortable: true,
-        },
-        {
-          key: "active_status",
-          label: "status",
-        },
-        {
-          key: "actions",
-          label: "actions",
+          key: "payment",
+          label: "payment",
         },
 
 
@@ -446,7 +343,10 @@ export default {
           phone_no: x.phone_no ? x.phone_no : "N/A",
           admin_role: x.admin_role,
           active_status: x.active_status,
-          image: x.image
+          image: x.image,
+          a_shift: x.a_shift ? 'Rs:' + x.a_shift : "N/A",
+          b_shift: x.b_shift ? 'Rs:' + x.b_shift : "N/A",
+          c_shift: x.c_shift ? 'Rs:' + x.c_shift : "N/A",
         }));
         this.noDataTable = Response.data.data.length;
         const paginationResponse = Response.data;

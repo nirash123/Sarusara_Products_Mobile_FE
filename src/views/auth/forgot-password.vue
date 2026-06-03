@@ -218,7 +218,7 @@ export default {
           await profile.customerResetPassword(this.payload)
          
             this.showSuccessMessage('Reset Password Successfully')
-            window.location = '/tbsnew' // /TBS/admin
+            window.location = '/TBS' // /TBS/admin
           this.isLoading = false
 
         } catch (error) {

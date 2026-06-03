@@ -1,10 +1,4 @@
 <template>
-  <!-- Error page-->
-  <div>
-
-    <div class="misc-inner ">
-
-
         <b-row>
           <b-col lg="4" md="12" sm="12" class="mb-2  mb-md-0">
             <b-card no-body class="earnings-card py-1">
@@ -703,12 +697,6 @@
             </b-card>
           </b-col>
         </b-row>
-    </div>
-
-  </div>
-
-
-  <!-- / Error page-->
 </template>
 
 <script>

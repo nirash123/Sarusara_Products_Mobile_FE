@@ -1,8 +1,7 @@
 <template>
   <div>
-    <b-card no-body>
 
-      <div class="m-2">
+      <div>
 
         <!-- Table Top -->
         <b-row>
@@ -18,55 +17,13 @@
           <b-col cols="12" md="7">
             <div class="d-flex align-items-center justify-content-end">
               <b-form-input v-model="filters['id_or_cus_id']" class="modern-search mr-1" placeholder="🔍 Search items..." />
-              <b-button class="modern-btn single-line-text" variant="primary" id="toggle-btn-price"
-                v-ripple.400="'rgba(113, 102, 240, 0.15)'" v-b-modal.modal-prevent-closing-price>
-                <span class="align-middle"> Add Item</span>
-              </b-button>
-              <b-modal id="modal-prevent-closing-price" centered ref="my-modal-price" title="Add New Item"
-                ok-title="Submit" cancel-variant="outline-secondary" @show="resetModalPrice" @hidden="resetModalPrice"
-                @ok="handleOkPrice">
-                <form ref="form" @submit.stop.prevent="handleSubmitPrice">
-                  <b-col sm="12" md="12">
-                    <b-form-group label="Item Code" label-for="bar_code" invalid-feedback="Item is required">
-                      <b-form-input ref="codeInput" id="item_code" v-model="item_code" :state="item_code_status"
-                        placeholder="Enter item code" required />
-                    </b-form-group>
-                  </b-col>
-                  <b-col cols="12">
-                    <b-form-group label="Category" label-for="group-input" invalid-feedback="Category is required">
-                      <v-select id="group-input" v-model="category" :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                        label="category_name" :options="groups" class="custom-v-select" required />
-                    </b-form-group>
-                  </b-col>
-                  <b-col sm="12" md="12">
-                    <b-form-group label="Item Name" label-for="item_name" invalid-feedback="Item Name is required">
-                      <b-form-input id="name" v-model="item_name" :state="item_name_status"
-                        placeholder="Enter item name" />
-                    </b-form-group>
-                  </b-col>
-                  <b-col cols="12">
-                        <b-form-group label="Quantity (Kg)" label-for="quentity"
-                          invalid-feedback="quentity is required">
-                          <b-form-input id="quentity" v-model="quentity" :state="quentity_status"
-                            placeholder="Enter quantity price" type="number"/>
-                        </b-form-group>
-                  </b-col>
-                  <b-col cols="12">
-                        <b-form-group label="Cost Price" label-for="buying_price"
-                          invalid-feedback="Cost Price is required">
-                          <b-form-input id="company_price" v-model="company_price" :state="company_price_status"
-                            placeholder="Enter buying price" type="number" step="0.01"/>
-                        </b-form-group>
-                  </b-col>
-                </form>
-              </b-modal>
             </div>
           </b-col>
         </b-row>
 
       </div>
 
-      <b-row class="m-2">
+      <b-row class="my-1">
         <b-col cols="12">
           <b-overlay :show="tableLoading" rounded="sm">
             <b-table ref="table" :current-page="currentPage" :fields="fields" :items="getUsers"
@@ -74,15 +31,9 @@
               :sort-direction="sortDirection" :filter="filter" :filter-included-fields="filterOn"
               class="mobile_table_css" hover responsive>
 
-              <template #cell(id)="data">
-                <div style="width: 90px !important">
-                  ITEM {{ data.item.id }}
-                </div>
-              </template>
-
               <template #cell(item_name)="data">
-                <div style="width: 300px !important">
-                  <span class="ml-1"> {{ data.item.item_name }} </span>
+                <div style="width: 150px !important">
+                  <span class="ml-1"> {{ data.item.item_code }} - {{ data.item.item_name }} </span>
                 </div>
               </template>
 
@@ -91,40 +42,11 @@
               </template>
 
               <template #cell(sale_price)="data">
-                <div style="width: 100px !important">
+                <div style="width: 150px !important">
                   {{ data.item.sale_price }}
                   <div class="text-danger">
                     {{ data.item.comapny_price }}
                   </div>
-                </div>
-              </template>
-
-              <template #cell(active_status)="data">
-                <b-badge v-if="data.item.active_status == '1'" class="ml-1" style="padding: 8px"
-                  variant="light-success">
-                  Active
-                </b-badge>
-                <b-badge v-if="data.item.active_status == '2'" class="ml-1" style="padding: 8px"
-                  variant="light-warning">
-                  InActive
-                </b-badge>
-              </template>
-
-              <!-- Column: Actions -->
-              <template #cell(actions)="data">
-
-                <div class="text-nowrap">
-                  <b-button v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="outline-primary" class="btn-icon mr-50">
-                    <feather-icon :id="`invoice-row-${data.item.id}-preview-icon`" icon="EditIcon" size="16"
-                      @click="$router.push({ name: 'edit-shop-item-details', params: { id: data.item.id } })" />
-                  </b-button>
-
-                  <b-button v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="outline-danger" class="btn-icon mr-50">
-                    <feather-icon :id="`invoice-row-${data.item.id}-preview-icon`" icon="TrashIcon" size="16"
-                      @click="deleteProduct(data.item.id)" />
-                  </b-button>
-
-
                 </div>
               </template>
 
@@ -170,7 +92,6 @@
           </b-pagination>
         </b-col>
       </b-row>
-    </b-card>
   </div>
 </template>
 
@@ -325,31 +246,18 @@ export default {
 
       fields: [
         {
-          key: "item_code",
-          label: "item code",
-          sortable: true,
-        },
-        {
           key: "item_name",
           label: "item name",
           sortable: true,
         },
         {
-          key: "category",
-          label: "category",
-        },
-        {
           key: "company_price",
-          label: "Cost Price",
+          label: "Cost_Price",
         },
         {
           key: "quentity",
-          label: "quantity",
+          label: "item_quantity",
           sortable: true,
-        },
-        {
-          key: "actions",
-          label: "actions",
         },
       ],
       items: [],

@@ -2,7 +2,7 @@
     <div>
         <b-card no-body>
 
-            <div class="m-2">
+            <div class="my-1">
 
                 <!-- Table Top -->
                 <b-row>
@@ -20,34 +20,13 @@
                         <div class="d-flex align-items-center justify-content-end">
                             <b-form-input v-model="filters['name_or_email']" class="d-inline-block modern-search mr-1"
                                 placeholder="🔍 Search categories..." />
-                            <b-button class="modern-btn single-line-text" variant="primary" id="toggle-btn-price"
-                                v-b-modal.modal-prevent-closing-price>
-                                <span class="align-middle"> Add</span>
-                            </b-button>
-                            <b-modal size="lg" id="modal-prevent-closing-price" centered ref="my-modal-price"
-                                title="Add New External Vehicle" ok-title="Submit" cancel-variant="outline-secondary"
-                                @show="resetModalPrice" @hidden="resetModalPrice" @ok="handleOkPrice">
-                                <form ref="form" @submit.stop.prevent="handleSubmitPrice">
-
-
-                                    <b-form-group label="Select Supplier">
-                                        <v-select v-model="supplier_id" label="label" :options="groups"
-                                            :reduce="item => item" class="custom-v-select" required />
-                                    </b-form-group>
-
-                                    <!-- Lorry Number -->
-                                    <b-form-group label="Vehicle Number" class="mb-5">
-                                        <b-form-input v-model="lorry_number" :state="lorry_number_status" required />
-                                    </b-form-group>
-                                </form>
-                            </b-modal>
                         </div>
                     </b-col>
                 </b-row>
 
             </div>
 
-            <b-row class="m-2">
+            <b-row class="my-1">
                 <b-col cols="12">
                     <b-overlay :show="tableLoading" rounded="sm">
                         <b-table ref="table" :current-page="currentPage" :fields="fields" :items="getUsers"
@@ -62,77 +41,39 @@
                                             <feather-icon icon="TruckIcon" size="18" class="mr-50 text-danger" />
                                         </b-col>
                                         <b-col>
-                                            <b-link class="font-weight-bold d-block text-nowrap">
+                                            <b-link class="font-weight-bold d-block text-nowrap mb-1">
                                                 {{ data.item.lorry_number }}
                                             </b-link>
                                         </b-col>
-                                    </b-row>
-                                </b-media>
-                            </template>
-
-
-                            <template #cell(supplier_name)="data">
-                                <b-media vertical-align="center">
-                                    <b-row class="align-items-center">
-                                        <b-col>
-                                            <b-link class="font-weight-bold d-block text-nowrap">
+                                        <div>
+                                          <b-col>
                                                 {{ data.item.supplier_name }}
-                                            </b-link>
-                                            <small>{{ data.item.address }}</small>
+                                            <div>{{ data.item.address }}</div>
+                                            <div>{{ data.item.phone_no }}</div>
                                         </b-col>
+                                        </div>
+                                        <b-badge v-if="data.item.status == '5'" class="ml-1" style="padding: 8px"
+                                            variant="light-success">
+                                            <span style="font-size: 20px;">♻️🚛</span> Collection Vehicle
+                                        </b-badge>
+                                        <b-badge v-if="data.item.status == '6'" class="ml-1" style="padding: 8px"
+                                            variant="light-danger">
+                                            <span style="font-size: 20px;">📦🚚 </span> Delivery Vehicle
+
+                                        </b-badge>
+                                        <div>
+                                        <b-badge v-if="data.item.active_status == '1'" class="ml-1"
+                                            style="padding: 8px" variant="light-success">
+                                            Active
+                                        </b-badge>
+                                        <b-badge v-if="data.item.active_status == '2'" class="ml-1"
+                                            style="padding: 8px" variant="light-warning">
+                                            InActive
+                                        </b-badge>
+                                        </div>
                                     </b-row>
                                 </b-media>
                             </template>
-                                <template #cell(status)="data">
-                                <b-badge v-if="data.item.status == '5'" class="ml-1" style="padding: 8px"
-                                    variant="light-success">
-                                    <span style="font-size: 20px;">♻️🚛</span> Collection Vehicle
-                                </b-badge>
-                                <b-badge v-if="data.item.status == '6'" class="ml-1" style="padding: 8px"
-                                    variant="light-danger">
-                                    <span style="font-size: 20px;">📦🚚 </span> Delivery Vehicle
-
-                                </b-badge>
-                            </template>
-
-                            <template #cell(active_status)="data">
-                                <b-badge v-if="data.item.active_status == '1'" class="ml-1" style="padding: 8px"
-                                    variant="light-success">
-                                    Active
-                                </b-badge>
-                                <b-badge v-if="data.item.active_status == '2'" class="ml-1" style="padding: 8px"
-                                    variant="light-warning">
-                                    InActive
-                                </b-badge>
-                            </template>
-
-                            <!-- Column: Actions -->
-                            <template #cell(actions)="data">
-                                <b-dropdown variant="link" no-caret :right="$store.state.appConfig.isRTL">
-
-                                    <template #button-content>
-                                        <feather-icon icon="MoreVerticalIcon" size="16"
-                                            class="align-middle text-body" />
-                                    </template>
-                                    <b-dropdown-item
-                                        :to="{ name: 'view-other-lorry-details', params: { id: data.item.id } }">
-                                        <feather-icon icon="FileTextIcon" />
-                                        <span class="align-middle ml-50">Details</span>
-                                    </b-dropdown-item>
-
-                                    <b-dropdown-item
-                                        :to="{ name: 'edit-other-lorry-details', params: { id: data.item.id } }">
-                                        <feather-icon icon="EditIcon" />
-                                        <span class="align-middle ml-50">Edit</span>
-                                    </b-dropdown-item>
-                                    <b-dropdown-item @click="deleteLorry(data.item.id)">
-                                        <feather-icon icon="TrashIcon" />
-                                        <span class="align-middle ml-50">Delete</span>
-                                    </b-dropdown-item>
-                                </b-dropdown>
-                            </template>
-
-
                         </b-table>
                     </b-overlay>
                 </b-col>
@@ -155,7 +96,7 @@
         " cols="12" sm="6">
                     <span v-if="pagination.totalRows !== 0" class="text-muted">Showing {{ pagination.from }} to {{
                         pagination.to
-                        }} of
+                    }} of
                         {{ pagination.totalRows }} entries</span>
                     <span v-else class="text-muted">Showing 0 to 0 of 0 entries</span>
                 </b-col>
@@ -321,33 +262,6 @@ export default {
                     label: "lorry number",
                     sortable: true,
                 },
-                {
-                    key: "supplier_name",
-                    label: "supplier",
-                    sortable: true,
-                },
-                {
-                    key: "phone_no",
-                    label: "mobile number",
-                    sortable: true,
-                },
-                
-                {
-                    key: "status",
-                    label: "vehicle type",
-                    sortable: true,
-                },
-                {
-                    key: "active_status",
-                    label: "status",
-                    sortable: true,
-                },
-                {
-                    key: "actions",
-                    label: "actions",
-                },
-
-
             ],
             items: [],
         };
@@ -417,9 +331,9 @@ export default {
                     lorry_number: x.lorry_number,
                     active_status: x.active_status,
                     status: x.status,
-                    supplier_name: x.status === 5? x.supplier_name: x.company_name,
-                    address: x.status === 5? x.supplier_address : x.company_address,
-                    phone_no: x.status === 5? x.supplier_phone_no : x.company_phone_no,
+                    supplier_name: x.status === 5 ? x.supplier_name : x.company_name,
+                    address: x.status === 5 ? x.supplier_address : x.company_address,
+                    phone_no: x.status === 5 ? x.supplier_phone_no : x.company_phone_no,
                 }));
                 this.noDataTable = Response.data.data.length;
                 const paginationResponse = Response.data;

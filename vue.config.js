@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  publicPath: '/tbsnew', // /TBS/admin
+  publicPath: '/TBS', // /TBS/admin
   css: {
     loaderOptions: {
       sass: {

@@ -1,14 +1,9 @@
 <template>
-  <b-card no-body>
-    <b-card-body>
-
       <chartjs-component-horizontal-bar-chart
         :height="440"
         :data="chartData"
         :options="chartOptions"
       />
-    </b-card-body>
-  </b-card>
 </template>
 
 <script>

@@ -20,26 +20,6 @@
                         <div class="d-flex align-items-center justify-content-end">
                             <b-form-input v-model="filters['name_or_email']" class="d-inline-block modern-search mr-1"
                                 placeholder="🔍 Search categories..." />
-                            <b-button class="modern-btn single-line-text" variant="primary" id="toggle-btn-price"
-                                v-b-modal.modal-prevent-closing-price>
-                                <span class="align-middle"> Add</span>
-                            </b-button>
-                            <b-modal size="lg" id="modal-prevent-closing-price" centered ref="my-modal-price"
-                                title="Add New Company Vehicle" ok-title="Submit" cancel-variant="outline-secondary"
-                                @show="resetModalPrice" @hidden="resetModalPrice" @ok="handleOkPrice">
-                                <form ref="form" @submit.stop.prevent="handleSubmitPrice">
-
-                                    <!-- Lorry Number -->
-                                    <b-form-group label="Vehicle Number">
-                                        <b-form-input v-model="lorry_number" :state="lorry_number_status" required />
-                                    </b-form-group>
-                                    <b-form-group class="pb-5" label="Vehicle Type">
-                                        <v-select v-model="status" :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                                            :options="statusOptions" :reduce="val => val.value" :clearable="false"
-                                            input-id="user-status" :state="status_status" />
-                                    </b-form-group>
-                                </form>
-                            </b-modal>
                         </div>
                     </b-col>
                 </b-row>
@@ -55,55 +35,46 @@
                             class="mobile_table_css" hover responsive style="min-height: 150px">
 
                             <template #cell(lorry_number)="data">
-                                <b-media vertical-align="center">
+                                <b-media  vertical-align="center">
                                     <b-row class="align-items-center">
                                         <b-col cols="auto">
                                             <feather-icon icon="TruckIcon" size="18" class="mr-50 text-danger" />
                                         </b-col>
                                         <b-col>
-                                            <b-link class="font-weight-bold d-block text-nowrap">
+                                            <b-link class="font-weight-bold d-block text-nowrap mb-1">
                                                 {{ data.item.lorry_number }}
                                             </b-link>
                                         </b-col>
-                                    </b-row>
-                                </b-media>
-                            </template>
+                                        <b-badge v-if="data.item.status == '1'" class="ml-1" style="padding: 8px"
+                                            variant="light-success">
+                                            <span style="font-size: 20px;">♻️🚛</span> Collection Vehicle
+                                        </b-badge>
+                                        <b-badge v-if="data.item.status == '2'" class="ml-1" style="padding: 8px"
+                                            variant="light-danger">
+                                            <span style="font-size: 20px;">📦🚚 </span> Delivery Vehicle
 
+                                        </b-badge>
+                                        <b-badge v-if="data.item.status == '3'" class="ml-1" style="padding: 8px"
+                                            variant="light-primary">
+                                            <span style="font-size: 20px;">🔄🚛 </span> Dual-Operation Vehicle
 
-                            <template #cell(address)="data">
-                                <b-media vertical-align="center">
-                                    <b-row class="align-items-center">
-                                        <b-col>
-                                            <b-link class="font-weight-bold d-block text-nowrap">
-                                                {{ data.item.full_name }}
-                                            </b-link>
-                                            <small>{{ data.item.address }}</small>
-                                        </b-col>
-                                    </b-row>
-                                </b-media>
-                            </template>
-                            <template #cell(status)="data">
-                                <b-badge v-if="data.item.status == '1'" class="ml-1" style="padding: 8px"
+                                        </b-badge>
+                                        <b-badge v-if="data.item.status == '4'" class="ml-1" style="padding: 8px"
+                                            variant="light-warning">
+                                            <span style="font-size: 20px;">🚜 </span> Support Equipment Vehicle
+
+                                        </b-badge>
+                                         <b-badge v-if="data.item.active_status == '1'" class="mt-1 ml-1" style="padding: 8px"
                                     variant="light-success">
-                                    <span style="font-size: 20px;">♻️🚛</span> Collection Vehicle
+                                    Active
                                 </b-badge>
-                                <b-badge v-if="data.item.status == '2'" class="ml-1" style="padding: 8px"
-                                    variant="light-danger">
-                                    <span style="font-size: 20px;">📦🚚 </span> Delivery Vehicle
-
-                                </b-badge>
-                                <b-badge v-if="data.item.status == '3'" class="ml-1" style="padding: 8px"
-                                    variant="light-primary">
-                                    <span style="font-size: 20px;">🔄🚛 </span> Dual-Operation Vehicle
-
-                                </b-badge>
-                                <b-badge v-if="data.item.status == '4'" class="ml-1" style="padding: 8px"
+                                <b-badge v-if="data.item.active_status == '2'" class="mt-1 ml-1" style="padding: 8px"
                                     variant="light-warning">
-                                    <span style="font-size: 20px;">🚜 </span> Support Equipment Vehicle
-
+                                    InActive
                                 </b-badge>
+                                    </b-row>
+                                </b-media>
                             </template>
-
                             <template #cell(sms)="data">
                                 <span class="ml-1">
                                     <b-form-checkbox disabled class="mt-50"
@@ -117,42 +88,6 @@
                                     </b-form-checkbox>
                                 </span>
                             </template>
-
-                            <template #cell(active_status)="data">
-                                <b-badge v-if="data.item.active_status == '1'" class="ml-1" style="padding: 8px"
-                                    variant="light-success">
-                                    Active
-                                </b-badge>
-                                <b-badge v-if="data.item.active_status == '2'" class="ml-1" style="padding: 8px"
-                                    variant="light-warning">
-                                    InActive
-                                </b-badge>
-                            </template>
-
-                            <!-- Column: Actions -->
-                            <template #cell(actions)="data">
-                                <b-dropdown variant="link" no-caret :right="$store.state.appConfig.isRTL">
-
-                                    <template #button-content>
-                                        <feather-icon icon="MoreVerticalIcon" size="16"
-                                            class="align-middle text-body" />
-                                    </template>
-                                    <b-dropdown-item :to="{ name: 'view-lorry-details', params: { id: data.item.id } }">
-                                        <feather-icon icon="FileTextIcon" />
-                                        <span class="align-middle ml-50">Details</span>
-                                    </b-dropdown-item>
-
-                                    <b-dropdown-item :to="{ name: 'edit-lorry-details', params: { id: data.item.id } }">
-                                        <feather-icon icon="EditIcon" />
-                                        <span class="align-middle ml-50">Edit</span>
-                                    </b-dropdown-item>
-                                    <b-dropdown-item @click="deleteLorry(data.item.id)">
-                                        <feather-icon icon="TrashIcon" />
-                                        <span class="align-middle ml-50">Delete</span>
-                                    </b-dropdown-item>
-                                </b-dropdown>
-                            </template>
-
 
                         </b-table>
                     </b-overlay>
@@ -176,7 +111,7 @@
         " cols="12" sm="6">
                     <span v-if="pagination.totalRows !== 0" class="text-muted">Showing {{ pagination.from }} to {{
                         pagination.to
-                        }} of
+                    }} of
                         {{ pagination.totalRows }} entries</span>
                     <span v-else class="text-muted">Showing 0 to 0 of 0 entries</span>
                 </b-col>
@@ -343,20 +278,6 @@ export default {
                 {
                     key: "sms",
                     label: "sms",
-                },
-                {
-                    key: "status",
-                    label: "vehicle type",
-                    sortable: true,
-                },
-                {
-                    key: "active_status",
-                    label: "status",
-                    sortable: true,
-                },
-                {
-                    key: "actions",
-                    label: "actions",
                 },
 
 

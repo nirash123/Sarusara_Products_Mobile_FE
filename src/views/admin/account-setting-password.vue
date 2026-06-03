@@ -174,7 +174,7 @@ export default {
           await profile.adminPasswordChange(this.payload)
          
             this.showSuccessMessage('Update Account Settings Successfully')
-            window.location = '/tbsnew' // /TBS/admin
+            window.location = '/TBS' // /TBS/admin
           this.isLoading = false
 
         } catch (error) {

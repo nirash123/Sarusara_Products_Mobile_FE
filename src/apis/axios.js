@@ -32,7 +32,7 @@ axiosIns.interceptors.request.use(
     }, (error) => {
         if (error.response.status === 403 || error.response.status === 401){
             localStorage.removeItem('isLoggedIn')
-            window.location = '/tbsnew' // /TBS/admin
+            window.location = '/TBS' // /TBS/admin
         }
 
         return Promise.reject(error)

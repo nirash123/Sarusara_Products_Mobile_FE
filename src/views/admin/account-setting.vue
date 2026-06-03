@@ -278,7 +278,7 @@ export default {
             this.showSuccessMessage('Update Account Settings Successfully')
             const cacheUserData = (await profile.getNewCurrentUser(this.payload)).data.data
             localStorage.setItem('userData', JSON.stringify(cacheUserData))
-            window.location = '/tbsnew' // /TBS/admin
+            window.location = '/TBS' // /TBS/admin
           this.isLoading = false
 
         } catch (error) {

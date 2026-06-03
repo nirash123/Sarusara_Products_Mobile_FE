@@ -86,7 +86,7 @@ export default {
       localStorage.removeItem('userData')
       localStorage.removeItem('isLoggedIn')
         if (window.location.pathname !== '/') {
-          window.location = '/tbsnew' // /TBS/admin
+          window.location = '/TBS' // /TBS/admin
         }
     },
 

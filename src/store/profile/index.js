@@ -66,13 +66,13 @@ export default {
             user: cacheUserData,
           })
           sessionStorage.setItem('is_current_user_data', '1')
-           window.location = '/tbsnew' // /TBS/admin
+           window.location = '/TBS' // /TBS/admin
            localStorage.removeItem('phone')
 
           // sessionStorage.setItem('is_current_user_data', '1')     
 
         }else {
-          window.location= '/tbsnew'  // /TBS/admin
+          window.location= '/TBS'  // /TBS/admin
         }
     },
 
@@ -80,8 +80,8 @@ export default {
     async logout({ commit }) {
       try {
         localStorage.removeItem('isLoggedIn')
-        if (window.location.pathname !== '/tbsnew') { // /TBS/admin
-          window.location = '/tbsnew' // /TBS/admin
+        if (window.location.pathname !== '/TBS') { // /TBS/admin
+          window.location = '/TBS' // /TBS/admin
         }
 
       } catch (error) {

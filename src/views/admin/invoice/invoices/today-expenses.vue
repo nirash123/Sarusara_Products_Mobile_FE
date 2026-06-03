@@ -27,13 +27,6 @@
               <div class="d-flex align-items-center justify-content-end">
                 <b-button class="ml-2 modern-btn mr-1 mt-md-0" variant="primary" @click="loadExpenses">
                   <feather-icon icon="RefreshCwIcon" size="16" class="mr-50" />
-
-                  Refresh 
-                </b-button>
-                <b-button class="ml-1 modern-btn single-line-text" @click="printInvoice">
-                  <span class="align-middle">
-                    Print
-                  </span>
                 </b-button>
 
               </div>

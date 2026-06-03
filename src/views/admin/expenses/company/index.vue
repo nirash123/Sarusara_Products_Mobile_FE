@@ -11,7 +11,7 @@
 
             <b-col cols="12" xl="7" class="mb-1">
 
-              <h4 class="d-md-none d-lg-none">Date Range - {{ rangeDate }}</h4>
+              <h5 class="d-md-none d-lg-none">Date Range - {{ rangeDate }}</h5>
 
               <div class="action-card  d-flex align-items-center">
                 <div class="mr-1">
@@ -26,15 +26,7 @@
               <div class="d-flex align-items-center justify-content-end">
                 <b-button class="ml-2 modern-btn mr-1 mt-md-0" variant="primary" @click="loadExpenses">
                   <feather-icon icon="RefreshCwIcon" size="16" class="mr-50" />
-
-                  Refresh 
                 </b-button>
-                <b-button class="ml-1 modern-btn single-line-text" @click="printInvoice">
-                  <span class="align-middle">
-                    Print
-                  </span>
-                </b-button>
-
               </div>
 
             </b-col>
@@ -49,125 +41,113 @@
 
             <!-- COLLAPSIBLE HEADER -->
             <div class="card-header-custom company-header d-flex justify-content-between align-items-center"
-               style="cursor:pointer;">
+              style="cursor:pointer;">
               <span>Company Expenses</span>
 
             </div>
 
 
-              <b-overlay :show="tableLoading" rounded="sm">
+            <b-overlay :show="tableLoading" rounded="sm">
 
-                <div class="table-wrapper">
+              <div class="table-wrapper">
 
-                 <b-table
-  :items="companies_expenses"
-  :fields="companyFields"
-  responsive
-  hover
-  small
-  sticky-header="500px"
-  head-variant="light"
-  class="modern-table">
+                <b-table :items="companies_expenses" :fields="companyFields" responsive hover small
+                  sticky-header="500px" head-variant="light" class="modern-table">
 
-  <!-- TYPE -->
-  <template #cell(expense_name)="data">
+                  <!-- TYPE -->
+                  <template #cell(expense_name)="data">
 
-    <div
-      :class="[
-        data.item.expense_name === 'TOTAL'
-          ? 'total-text'
-          : 'normal-text'
-      ]">
+                    <div :class="[
+                      data.item.expense_name === 'TOTAL'
+                        ? 'total-text'
+                        : 'normal-text'
+                    ]">
 
-      {{ data.item.expense_name }}
+                      {{ data.item.expense_name }}
 
-    </div>
+                    </div>
 
-  </template>
+                  </template>
 
-  <!-- CASH -->
-  <template #cell(cash)="data">
+                  <!-- CASH -->
+                  <template #cell(cash)="data">
 
-    <div
-      :class="[
-        data.item.expense_name === 'TOTAL'
-          ? 'total-amount'
-          : ''
-      ]">
+                    <div :class="[
+                      data.item.expense_name === 'TOTAL'
+                        ? 'total-amount'
+                        : ''
+                    ]">
 
-      {{ data.item.cash }}
+                      {{ data.item.cash }}
 
-    </div>
+                    </div>
 
-  </template>
+                  </template>
 
-  <!-- CARD -->
-  <template #cell(bank)="data">
+                  <!-- CARD -->
+                  <template #cell(bank)="data">
 
-    <div
-      :class="[
-        data.item.expense_name === 'TOTAL'
-          ? 'total-amount'
-          : ''
-      ]">
+                    <div :class="[
+                      data.item.expense_name === 'TOTAL'
+                        ? 'total-amount'
+                        : ''
+                    ]">
 
-      {{ data.item.bank }}
+                      {{ data.item.bank }}
 
-    </div>
+                    </div>
 
-  </template>
+                  </template>
 
-  <!-- AMOUNT -->
-  <template #cell(amount)="data">
+                  <!-- AMOUNT -->
+                  <template #cell(amount)="data">
 
-    <div
-      :class="[
-        data.item.expense_name === 'TOTAL'
-          ? 'grand-total'
-          : 'expense-amount'
-      ]">
+                    <div :class="[
+                      data.item.expense_name === 'TOTAL'
+                        ? 'grand-total'
+                        : 'expense-amount'
+                    ]">
 
-      {{ data.item.amount }}
+                      {{ data.item.amount }}
 
-    </div>
+                    </div>
 
-  </template>
+                  </template>
 
-  <!-- RECORDS -->
-  <template #cell(record)="data">
+                  <!-- RECORDS -->
+                  <template #cell(record)="data">
 
-    <div
-      :class="[
-        data.item.expense_name === 'TOTAL'
-          ? 'total-records'
-          : ''
-      ]">
+                    <div :class="[
+                      data.item.expense_name === 'TOTAL'
+                        ? 'total-records'
+                        : ''
+                    ]">
 
-      {{ data.item.record }}
+                      {{ data.item.record }}
 
-    </div>
+                    </div>
 
-  </template>
+                  </template>
 
-  <!-- ROW STYLE -->
-  <template #row-class="item">
+                  <!-- ROW STYLE -->
+                  <template #row-class="item">
 
-    {{ item.expense_name === 'TOTAL'
-      ? 'total-row'
-      : ''
-    }}
+                    {{ item.expense_name === 'TOTAL'
+                      ? 'total-row'
+                    : ''
+                    }}
 
-  </template>
+                  </template>
 
-</b-table>
+                </b-table>
 
-                </div>
-
-              </b-overlay>
-
-              <div v-if="companies_expenses.length == 0" class="empty-state">
-                No Company Expenses
               </div>
+
+            </b-overlay>
+
+            <div v-if="companies_expenses.length == 0" class="empty-state">
+              No Company Expenses
+            </div>
 
 
           </b-card>
@@ -377,19 +357,19 @@ export default {
           expense_name: x.expense_name,
 
           amount: `Rs ${Number(x.total_amount).toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        })}`,
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          })}`,
 
-        cash: `Rs ${Number(x.total_cash).toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        })}`,
+          cash: `Rs ${Number(x.total_cash).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          })}`,
 
-        bank: `Rs ${Number(x.total_bank).toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        })}`,
+          bank: `Rs ${Number(x.total_bank).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          })}`,
 
           record: x.total_records,
 
@@ -418,7 +398,6 @@ export default {
 
 
 <style scoped>
-
 .modern-table {
   border-radius: 14px;
   overflow: hidden;

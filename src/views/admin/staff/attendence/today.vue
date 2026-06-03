@@ -1,29 +1,9 @@
 <template>
   <div>
     <b-card class="p-0">
-      <b-row class="align-items-end g-2">
-
-        <!-- INPUT SECTION -->
-        <b-col cols="12">
-          <div class="input-card">
-
-            <label class="input-label">
-              Staff Code / QR Scan
-            </label>
-
-            <b-form-input type="text" ref="nameInput" v-model="user_code" @keyup.enter="handleQRCode" autofocus
-              class="modern-input" placeholder="Enter staff code or scan card..." />
-
-            <small class="input-hint">
-              Press Enter after typing
-            </small>
-
-          </div>
-        </b-col>
-      </b-row>
       <div class="my-1">
         <div class="d-flex justify-content-center">
-          <h2><b>TODAY PRESENT STAFF</b></h2>
+          <h5><b>TODAY PRESENT STAFF</b></h5>
         </div>
         <b-row>
           <!-- Per Page -->
@@ -35,240 +15,13 @@
 
           <!-- Search -->
           <b-col cols="12" md="7">
-            <div class="d-flex align-items-center justify-content-end">
-              <b-button class="modern-btn  single-line-text" id="toggle-btn-price"
-                v-b-modal.modal-prevent-closing-price>
-                <span class="align-middle"> Settings</span>
-              </b-button>
-              <b-modal size="lg" id="modal-prevent-closing-price" centered ref="my-modal-price" hide-footer
-                no-close-on-backdrop modal-class="attendance-setting-modal" content-class="attendance-setting-content"
-                @hidden="resetModalPrice">
 
-                <!-- HEADER -->
-                <div class="settings-header">
-
-                  <div>
-                    <h2 class="settings-title">
-                      Attendance Settings
-                    </h2>
-
-                    <p class="settings-subtitle">
-                      Configure shift hours, breaks, overtime and additional working hours
-                    </p>
-                  </div>
-
-                  <div class="total-hour-card">
-                    <div class="total-hour-label">
-                      Maximum Total Hour
-                    </div>
-
-                    <div class="total-hour-value">
-                      {{ new_total_time }} H
-                    </div>
-                  </div>
-
-                </div>
-
-                <form ref="form" @submit.stop.prevent="handleSubmitPrice">
-
-                  <!-- SHIFT TIME -->
-                  <div class="setting-section">
-
-                    <div class="section-title">
-                      <i class="fas fa-business-time mr-1"></i>
-                      Shift Time
-                    </div>
-
-                    <b-row>
-
-                      <b-col md="12" lg="4">
-                        <b-form-group label="Shift Start Time">
-
-                          <b-form-input type="time" v-model="new_start_time" :state="shift_start_time_status"
-                            class="modern-input" />
-
-                        </b-form-group>
-                      </b-col>
-
-                      <b-col md="12" lg="4">
-                        <b-form-group label="Shift End Time">
-
-                          <b-form-input type="time" v-model="new_end_time" :state="shift_end_time_status"
-                            class="modern-input" />
-
-                        </b-form-group>
-                      </b-col>
-
-                      <b-col md="12" lg="4">
-                        <b-form-group label="Working Hours">
-
-                          <b-form-input type="number" v-model="new_a_shift" :state="standard_work_hours_status"
-                            placeholder="Hours" class="modern-input" />
-
-                        </b-form-group>
-                      </b-col>
-
-                    </b-row>
-
-                  </div>
-
-                  <!-- BREAK -->
-                  <div class="setting-section">
-
-                    <div class="section-title">
-                      <i class="fas fa-coffee mr-1"></i>
-                      Break Time
-                    </div>
-
-                    <b-row>
-
-                      <b-col md="12" lg="6">
-                        <b-form-group label="Break Start Time">
-
-                          <b-form-input type="time" v-model="new_free_in_time" :state="break_start_time_status"
-                            class="modern-input" />
-
-                        </b-form-group>
-                      </b-col>
-
-                      <b-col md="12" lg="6">
-                        <b-form-group label="Break End Time">
-
-                          <b-form-input type="time" v-model="new_free_out_time" :state="break_end_time_status"
-                            class="modern-input" />
-
-                        </b-form-group>
-                      </b-col>
-
-                    </b-row>
-
-                  </div>
-
-                  <!-- OT -->
-                  <div class="setting-section">
-
-                    <div class="section-title">
-                      <i class="fas fa-clock mr-1"></i>
-                      Overtime
-                    </div>
-
-                    <b-row>
-
-                      <b-col md="12" lg="4">
-                        <b-form-group label="OT Start Time">
-
-                          <b-form-input type="time" v-model="new_n_start_time" :state="shift_n_start_time_status"
-                            class="modern-input" />
-
-                        </b-form-group>
-                      </b-col>
-
-                      <b-col md="12" lg="4">
-                        <b-form-group label="OT End Time">
-
-                          <b-form-input type="time" v-model="new_n_end_time" :state="shift_n_end_time_status"
-                            class="modern-input" />
-
-                        </b-form-group>
-                      </b-col>
-
-                      <b-col md="12" lg="4">
-                        <b-form-group label="OT Hours">
-
-                          <b-form-input type="number" v-model="new_b_shift" :state="overtime_hours_status"
-                            placeholder="Hours" class="modern-input" />
-
-                        </b-form-group>
-                      </b-col>
-
-                    </b-row>
-
-                  </div>
-
-                  <!-- FREE SHIFT -->
-                  <div class="setting-section">
-
-                    <div class="section-title">
-                      <i class="fas fa-user-clock mr-1"></i>
-                      Free Shift Time
-                    </div>
-
-                    <b-row>
-
-                      <b-col md="12" lg="4">
-                        <b-form-group label="Free Shift Start">
-
-                          <b-form-input type="time" v-model="new_free_n_in_time" :state="shift_free_n_in_time_status"
-                            class="modern-input" />
-
-                        </b-form-group>
-                      </b-col>
-
-                      <b-col md="12" lg="4">
-                        <b-form-group label="Free Shift End">
-
-                          <b-form-input type="time" v-model="new_free_n_out_time" :state="shift_free_n_out_time_status"
-                            class="modern-input" />
-
-                        </b-form-group>
-                      </b-col>
-
-                      <b-col md="12" lg="4">
-                        <b-form-group label="Additional Hours">
-
-                          <b-form-input type="number" v-model="new_c_shift" :state="additional_hours_status"
-                            placeholder="Hours" class="modern-input" />
-
-                        </b-form-group>
-                      </b-col>
-
-                    </b-row>
-
-                  </div>
-
-                  <!-- FOOTER -->
-                  <div class="settings-footer">
-
-                    <b-button variant="outline-secondary" class="cancel-btn" @click="$refs['my-modal-price'].hide()">
-                      Cancel
-                    </b-button>
-
-                    <b-button variant="primary" class="save-btn" @click="handleSubmitPrice">
-                      Save Settings
-                    </b-button>
-
-                  </div>
-
-                </form>
-
-              </b-modal>
-              <b-modal id="loading-modal" centered hide-header hide-footer no-close-on-backdrop no-close-on-esc
-                modal-class="loading-modal" content-class="loading-content">
-
-                <div class="loading-wrapper">
-
-                  <div class="loading-circle">
-                    <b-spinner variant="primary"></b-spinner>
-                  </div>
-
-                  <h4 class="loading-title">
-                    Updating Attendance
-                  </h4>
-
-                  <p class="loading-text">
-                    Please wait while we process your request...
-                  </p>
-
-                </div>
-
-              </b-modal>
-            </div>
           </b-col>
         </b-row>
 
       </div>
 
-      <b-row class="m-2">
+      <b-row class="my-1">
         <b-col cols="12">
           <b-overlay :show="tableLoading" rounded="sm">
             <b-table ref="table" :current-page="currentPage" :fields="fields" :items="attendence_carts"
@@ -280,15 +33,11 @@
                 <b-media vertical-align="center">
                   <b-row class="align-items-center">
                     <b-col cols="auto">
-                      <b-avatar size="40" :src="'http://127.0.0.1:8000/' + data.item.image"
-                        :to="{ name: 'view-staff-details', params: { id: data.item.id } }" />
+                          <b-avatar size="40" :src="imageUrl + data.item.image" />
                     </b-col>
                     <b-col>
-                      <b-link :to="{ name: 'view-staff-details', params: { id: data.item.id } }"
-                        class="font-weight-bold d-block text-nowrap">
-                        {{ data.item.full_name }}
-                      </b-link>
-                      <small>{{ data.item.user_code }} @{{ data.item.user_name }}</small>
+                      {{ data.item.full_name }}
+                      <div>{{ data.item.user_code }} @{{ data.item.user_name }}</div>
 
                       <!-- Admin (ID = 1) -->
                       <div v-if="data.item.admin_role == 'TBSAdmin' && data.item.id == 1" class="text-nowrap">
@@ -325,69 +74,12 @@
                         <feather-icon icon="TruckIcon" size="18" class="mr-50 text-danger" />
                         <span class="align-text-top text-capitalize">Driver</span>
                       </div>
+                      <div> Check-In - {{ data.item.check_in_time }}</div>
+                      <div> Check-Out - {{ data.item.check_out_time }}</div>
                     </b-col>
                   </b-row>
                 </b-media>
               </template>
-
-              <!-- Column: check_in_time -->
-              <template #cell(check_in_time)="data">
-                <b-form-input v-if="data.item.status == 1" id="shift_start_time" type="time"
-                  v-model="data.item.check_in_time" :state="shift_start_time_status"
-                  placeholder="Select shift start time"
-                  @change="changeTime(data.item.id, 1, data.item.check_in_time)" />
-                <div v-else>{{ data.item.check_in_time }}</div>
-              </template>
-
-              <!-- Column: check_out_time -->
-              <template #cell(check_out_time)="data">
-
-                <b-form-input v-if="data.item.status == 1" v-model="data.item.check_out_time"
-                  @change="changeTime(data.item.id, 2, data.item.check_out_time)" type="time" :value="data.item.check_out_time === '00:00'
-                    ? ''
-                    : data.item.check_out_time.slice(0, 5)
-                    " :class="{
-                      'red-input': data.item.check_out_time === '00:00'
-                    }" placeholder="Select shift start time" />
-                <div v-else>{{ data.item.check_out_time }}</div>
-              </template>
-
-              <!-- Column: check_in_time -->
-              <template #cell(extra_time)="data">
-                <b-form-input v-if="data.item.status == 1" id="extra_free_time" type="number"
-                  v-model="data.item.extra_time" placeholder="Select shift start time"
-                  @change="changeTime(data.item.id, 3, data.item.extra_time)" />
-                <div v-else>{{ data.item.extra_time }}</div>
-              </template>
-
-              <!-- Column: free_time -->
-              <template #cell(free_time)="data">
-                <span class="ml-1">
-                  <b-form-checkbox v-if="data.item.status == 1" :checked="data.item.free_time == 1"
-                    @change="handleChange(data.item.id, $event ? 1 : 0)">
-                  </b-form-checkbox>
-                  <b-form-checkbox v-else disabled :checked="data.item.free_time == 1">
-                  </b-form-checkbox>
-                </span>
-              </template>
-              <!-- Column: Actions -->
-              <template #cell(actions)="data">
-                <div v-if="data.item.status === 1">
-                  <b-button v-if="data.item.final_time_period > 0" v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="outline-primary" class="btn-icon mr-50">
-                    <feather-icon :id="`invoice-row-${data.item.id}-preview-icon`" icon="CheckIcon" size="16"
-                      @click="submitUser(data.item.id)" />
-                  </b-button>
-                  <b-button v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="outline-danger" class="btn-icon mr-50">
-                    <feather-icon :id="`invoice-row-${data.item.id}-preview-icon`" icon="TrashIcon" size="16"
-                      @click="deleteUser(data.item.id)" />
-                  </b-button>
-                </div>
-                <div v-else>
-
-                </div>
-              </template>
-
-
             </b-table>
           </b-overlay>
         </b-col>
@@ -434,7 +126,7 @@
 
     <b-card class="p-0">
       <div class="d-flex justify-content-center">
-        <h2><b>TODAY ABSENT STAFF</b></h2>
+        <h5><b>TODAY ABSENT STAFF</b></h5>
       </div>
       <div class="mt-2">
         <b-row>
@@ -448,7 +140,7 @@
 
       </div>
 
-      <b-row class="m-2">
+      <b-row class="my-1">
         <b-col cols="12">
           <b-overlay :show="tableLoading" rounded="sm">
             <b-table ref="table" :current-page="currentPage2" :fields="fields2" :items="attendence_pending_carts"
@@ -460,15 +152,13 @@
                 <b-media vertical-align="center">
                   <b-row class="align-items-center">
                     <b-col cols="auto">
-                      <b-avatar size="40" :src="'http://127.0.0.1:8000/' + data.item.image"
-                        :to="{ name: 'view-staff-details', params: { id: data.item.id } }" />
+                          <b-avatar size="40" :src="imageUrl + data.item.image" />
                     </b-col>
                     <b-col>
-                      <b-link :to="{ name: 'view-staff-details', params: { id: data.item.id } }"
-                        class="font-weight-bold d-block text-nowrap">
                         {{ data.item.full_name }}
-                      </b-link>
-                      <small> @{{ data.item.user_name }}</small>
+                      <div> {{ data.item.user_code }}@{{ data.item.user_name }}</div>
+                       <div> {{ data.item.address }}</div>
+                        <div> {{ data.item.phone_no }}</div>
 
                     </b-col>
                   </b-row>
@@ -674,6 +364,8 @@ export default {
   mixins: [ErrorMessages, SuccessMessage, MomentMixin, Filter],
   data() {
     return {
+      
+      imageUrl: process.env.VUE_APP_IMAGE_URL,
       attendence_carts: [],
       attendence_pending_carts: [],
       userData: JSON.parse(localStorage.getItem('userData')),
@@ -769,73 +461,13 @@ export default {
           label: "name",
           sortable: true,
         },
-        {
-          key: "check_in_time",
-          label: "Check-In",
-          sortable: true,
-        },
-        {
-          key: "check_out_time",
-          label: "Check-Out",
-          sortable: true,
-        },
-        {
-          key: "work_time",
-          label: "Time Period Hour",
-          sortable: true,
-        },
-        {
-          key: "free_time",
-          label: "Free Time",
-          sortable: true,
-        },
-        {
-          key: "extra_time",
-          label: "Extra Free Time (MIN)",
-          sortable: true,
-        },
-        {
-          key: "total_time",
-          label: "Total Free Time (H)",
-          sortable: true,
-        },
-        {
-          key: "work_time_period",
-          label: "Working Hour",
-          sortable: true,
-        },
-        {
-          key: "final_time_period",
-          label: "Final Working Hour",
-          sortable: true,
-        },
-        {
-          key: "actions",
-          label: "actions",
-        },
       ],
 
       fields2: [
         {
-          key: "user_code",
-          label: "code",
-        },
-        {
           key: "users_user_name",
           label: "name",
           sortable: true,
-        },
-        {
-          key: "address",
-          label: "address",
-        },
-        {
-          key: "phone_no",
-          label: "mobile number",
-        },
-        {
-          key: "job_role",
-          label: "role",
         },
       ],
       items: [],
@@ -972,7 +604,7 @@ export default {
         const dataArray = Response.data.data.map((x) => ({
           id: x.id,
           user_code: x.users_user_code,
-          users_user_name: x.users_user_name,
+          user_name: x.users_user_name,
           full_name: x.users_first_name + ' ' + x.users_last_name,
           check_in_time: x.check_in_time ? x.check_in_time : "00:00",
           check_out_time: x.check_out_time ? x.check_out_time : "00:00",
@@ -1309,14 +941,9 @@ export default {
   },
 
   mounted() {
-
-    if (JSON.parse(localStorage.getItem('userData')).admin_role !== 'TBSAdmin') {
-      this.$router.push('/')
-    } else {
-      this.getUsers()
-      this.getOldUsers();
-      this.settingTimeData()
-    }
+    this.getUsers()
+    this.getOldUsers();
+    this.settingTimeData()
   }
 };
 </script>

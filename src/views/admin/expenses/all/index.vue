@@ -11,7 +11,7 @@
 
             <b-col cols="12" xl="7" class="mb-1">
 
-              <h4 class="d-md-none d-lg-none">Date Range - {{ rangeDate }}</h4>
+              <h5 class="d-md-none d-lg-none">Date Range - {{ rangeDate }}</h5>
 
               <div class="action-card  d-flex align-items-center">
                 <div class="mr-1">
@@ -27,19 +27,6 @@
               <div class="d-flex align-items-center justify-content-end">
                 <b-button class="ml-2 modern-btn mr-1 mt-md-0" variant="primary" @click="loadExpenses">
                   <feather-icon icon="RefreshCwIcon" size="16" class="mr-50" />
-
-                  Refresh 
-                </b-button>
-                <b-button class="modern-btn single-line-text" id="toggle-btn-price"
-                  v-ripple.400="'rgba(113, 102, 240, 0.15)'" v-b-modal.modal-prevent-closing-price>
-                  <span class="align-middle">
-                    Add New Expenses
-                  </span>
-                </b-button>
-                <b-button class="ml-1 modern-btn single-line-text" @click="printInvoice">
-                  <span class="align-middle">
-                    Print
-                  </span>
                 </b-button>
 
               </div>
@@ -176,19 +163,6 @@
                   <b-table :items="companies_expenses" :fields="companyFields" responsive hover small
                     sticky-header="400px" head-variant="light" class="modern-table">
 
-                    <template #cell(date)="data">
-
-                      <div class="text-nowrap">
-                        {{ data.item.date }} - {{ data.item.time }}
-                        <b-button v-if="userData.id === 1"  v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="outline-danger"
-                          class="action-card ml-1 btn-icon mr-50" @click="deleteExpense(data.item.id)">
-                          <feather-icon :id="`invoice-row-${data.item.id}-preview-icon`" icon="TrashIcon" size="16" />
-                        </b-button>
-
-
-                      </div>
-                    </template>
-
                   </b-table>
 
                 </div>
@@ -231,15 +205,6 @@
                       </div>
                     </template>
 
-                           <template #cell(action)="data">
-
-                      <div class="text-nowrap">
-                        <b-button v-if="userData.id === 1" v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="outline-danger"
-                          @click="deleteExpense(data.item.id)" class="action-card ml-1 btn-icon mr-50">
-                          <feather-icon :id="`invoice-row-${data.item.id}-preview-icon`" icon="TrashIcon" size="16" />
-                        </b-button>
-                      </div>
-                    </template>
                   </b-table>
 
                 </div>
@@ -281,17 +246,6 @@
                         {{ data.item.date }} - {{ data.item.time }}
                       </div>
                     </template>
-
-                     <template #cell(action)="data">
-
-                      <div class="text-nowrap">
-                        <b-button v-if="userData.id === 1"  v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="outline-danger"
-                          class="action-card ml-1 btn-icon mr-50" @click="deleteExpense(data.item.id)">
-                          <feather-icon :id="`invoice-row-${data.item.id}-preview-icon`" icon="TrashIcon" size="16" />
-                        </b-button>
-                      </div>
-                    </template>
-
                   </b-table>
 
                 </div>
@@ -326,19 +280,6 @@
 
                   <b-table :items="other_expenses" :fields="otherFields" responsive hover small sticky-header="400px"
                     head-variant="light" class="modern-table">
-
-                    <template #cell(date)="data">
-
-                      <div class="text-nowrap">
-                        {{ data.item.date }} - {{ data.item.time }}
-                        <b-button v-if="userData.id === 1"  v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="outline-danger"
-                          class="action-card ml-1 btn-icon mr-50" @click="deleteExpense(data.item.id)">
-                          <feather-icon :id="`invoice-row-${data.item.id}-preview-icon`" icon="TrashIcon" size="16" />
-                        </b-button>
-
-
-                      </div>
-                    </template>
 
                   </b-table>
 
@@ -413,8 +354,6 @@ export default {
     today.setDate(today.getDate() - 1);
     last_date.setDate(today.getDate() - 6);
     return {
-
-      userData: JSON.parse(localStorage.getItem('userData')),
       expense_id: '',
       expenses_groups: [],
       staff_groups: [],
@@ -467,7 +406,6 @@ export default {
         { key: 'bank', label: 'Card' },
         { key: 'amount', label: 'Expense' },
         { key: 'date', label: 'Date' },
-        { key: 'action', label: 'Signature' },
       ],
 
       vehicleFields: [
@@ -479,7 +417,6 @@ export default {
         { key: 'bank', label: 'Card' },
         { key: 'amount', label: 'Expense' },
         { key: 'date', label: 'Date' },
-        { key: 'action', label: 'Signature' },
       ],
 
       otherFields: [
@@ -804,101 +741,11 @@ export default {
         return
       }
 
-      this.addExpenses()
 
       // Close modal
       this.$nextTick(() => {
         this.$refs['my-modal-price'].hide()
       })
-    },
-
-    /*
-    |--------------------------------------------------------------------------
-    | Create Expenses
-    |--------------------------------------------------------------------------
-    */
-
-    async addExpenses() {
-      const userData = JSON.parse(localStorage.getItem('userData'))
-      try {
-
-        this.isLoading = true
-
-        const payload = {
-          cashier_id: userData?.id || userData?.user?.id,
-          category_id: this.expense_id,
-          sub_category_id: this.expenses_type_id?.id || null,
-
-          user_id:
-            this.expense_id === 2
-              ? this.staff_id?.id
-              : this.expense_id === 3
-                ? this.vehicle_id?.id
-                : null,
-
-          note: this.note,
-
-          cash: parseFloat(this.cash || 0),
-          bank: parseFloat(this.bank || 0),
-          amount: parseFloat(this.amount || 0),
-
-          status: 1,
-        }
-
-        await admin.expensesCreate(payload)
-
-        this.showSuccessMessage('Expenses Added Successfully')
-
-        this.$refs.table.refresh()
-        this.loadExpenses()
-        this.resetModalPrice()
-
-      } catch (error) {
-        this.loadExpenses()
-      } finally {
-
-        this.isLoading = false
-      }
-    },
-
-    async deleteExpense(id) {
-
-      try {
-        this.tableLoading = true
-        this.$swal({
-          title: 'Are you sure you want to delete this?',
-          text: '',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, delete',
-          cancelButtonText: 'No, go back',
-          customClass: {
-            confirmButton: 'btn btn-primary',
-            cancelButton: 'btn btn-outline-danger ml-1'
-          },
-          buttonsStyling: false
-        }).then(async result => {
-          if (result.value) {
-            await admin.expensesDelete(id)
-            this.showErrorMessage('Item has been deleted')
-            this.refreshTable();
-            this.loadExpenses()
-          } else if (result.dismiss == 'cancel') {
-            this.loadExpenses()
-            this.formLoading = false
-            this.showSuccessMessage('Cancelled')
-          }
-        })
-
-        await this.loadExpenses()
-        this.tableLoading = false
-
-      } catch (error) {
-        this.convertAndNotifyError(error)
-        this.tableLoading = false
-      }
-
-      await this.loadExpenses()
     },
 
   },

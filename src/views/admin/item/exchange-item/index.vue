@@ -9,7 +9,7 @@
           <b-row class="align-items-center">
 
             <b-col cols="12" xl="7">
-              <h4 class="d-md-none">Date Range - {{ rangeDate }}</h4>
+              <h5 class="d-md-none">Date Range - {{ rangeDate }}</h5>
 
               <div class="action-card d-flex align-items-center">
                 <div class="mr-1">
@@ -24,15 +24,7 @@
               <div class="d-flex justify-content-end">
 
                 <b-button class="mr-1" variant="primary" @click="loadExchangeOrders">
-                  Refresh
-                </b-button>
-
-                <b-button class="mr-1" variant="success" v-b-modal.modal-exchange>
-                  Add Exchange
-                </b-button>
-
-                <b-button variant="dark" @click="printInvoice">
-                  Print
+                 <feather-icon icon="RefreshCwIcon" size="16" class="mr-50" />
                 </b-button>
 
               </div>

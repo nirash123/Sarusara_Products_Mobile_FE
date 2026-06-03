@@ -3,23 +3,6 @@
     <b-card class="p-0">
       <b-row class="align-items-end g-2">
 
-        <!-- INPUT SECTION -->
-        <b-col md="12" lg="8">
-          <div v-if="userData.id == 1" class="input-card">
-            <label class="input-label">
-              Staff Code / QR Scan
-            </label>
-
-            <b-form-input type="text" ref="nameInput" v-model="user_code" @keyup.enter="handleQRCode" autofocus
-              class="modern-input" placeholder="Enter staff code or scan card..." />
-
-            <small class="input-hint">
-              Press Enter after typing
-            </small>
-
-          </div>
-        </b-col>
-
         <!-- DATE SECTION -->
         <b-col md="12" lg="4">
           <div class="input-card">
@@ -39,7 +22,7 @@
 
       <div class="my-1">
         <div class="d-flex justify-content-center">
-          <h2><b>{{ selectedDate }} - PRESENT STAFF</b></h2>
+          <h5><b>{{ selectedDate }} - PRESENT STAFF</b></h5>
         </div>
         <b-row>
           <!-- Per Page -->
@@ -78,7 +61,7 @@
 
       </div>
 
-      <b-row class="m-2">
+      <b-row class="my-1">
         <b-col cols="12">
           <b-overlay :show="tableLoading" rounded="sm">
             <b-table ref="table" :current-page="currentPage" :fields="fields" :items="attendence_carts"
@@ -90,15 +73,11 @@
                 <b-media vertical-align="center">
                   <b-row class="align-items-center">
                     <b-col cols="auto">
-                      <b-avatar size="40" :src="'http://127.0.0.1:8000/' + data.item.image"
-                        :to="{ name: 'view-staff-details', params: { id: data.item.id } }" />
+                          <b-avatar size="40" :src="imageUrl + data.item.image" />
                     </b-col>
                     <b-col>
-                      <b-link :to="{ name: 'view-staff-details', params: { id: data.item.id } }"
-                        class="font-weight-bold d-block text-nowrap">
-                        {{ data.item.full_name }}
-                      </b-link>
-                      <small>{{ data.item.user_code }} @{{ data.item.user_name }}</small>
+                        {{ data.item.full_name}}
+                      <div>{{ data.item.user_code }} @{{ data.item.user_name }}</div>
 
                       <!-- Admin (ID = 1) -->
                       <div v-if="data.item.admin_role == 'TBSAdmin' && data.item.id == 1" class="text-nowrap">
@@ -135,67 +114,13 @@
                         <feather-icon icon="TruckIcon" size="18" class="mr-50 text-danger" />
                         <span class="align-text-top text-capitalize">Driver</span>
                       </div>
+                        <div> Check-In - {{ data.item.check_in_time }}</div>
+                      <div> Check-Out - {{ data.item.check_out_time }}</div>
                     </b-col>
                   </b-row>
                 </b-media>
               </template>
 
-              <!-- Column: check_in_time -->
-              <template #cell(check_in_time)="data">
-                <b-form-input v-if="data.item.status == 1" id="shift_start_time" type="time"
-                  v-model="data.item.check_in_time" :state="shift_start_time_status"
-                  placeholder="Select shift start time"
-                  @change="changeTime(data.item.id, 1, data.item.check_in_time)" />
-                <div v-else>{{ data.item.check_in_time }}</div>
-              </template>
-
-              <!-- Column: check_out_time -->
-              <template #cell(check_out_time)="data">
-
-                <b-form-input v-if="data.item.status == 1" v-model="data.item.check_out_time"
-                  @change="changeTime(data.item.id, 2, data.item.check_out_time)" type="time" :value="data.item.check_out_time === '00:00'
-                    ? ''
-                    : data.item.check_out_time.slice(0, 5)
-                    " :class="{
-                      'red-input': data.item.check_out_time === '00:00'
-                    }" placeholder="Select shift start time" />
-                <div v-else>{{ data.item.check_out_time }}</div>
-              </template>
-
-              <!-- Column: check_in_time -->
-              <template #cell(extra_time)="data">
-                <b-form-input v-if="data.item.status == 1" id="extra_free_time" type="number"
-                  v-model="data.item.extra_time" placeholder="Select shift start time"
-                  @change="changeTime(data.item.id, 3, data.item.extra_time)" />
-                <div v-else>{{ data.item.extra_time }}</div>
-              </template>
-
-              <!-- Column: free_time -->
-              <template #cell(free_time)="data">
-                <span class="ml-1">
-                  <b-form-checkbox v-if="data.item.status == 1" :checked="data.item.free_time == 1"
-                    @change="handleChange(data.item.id, $event ? 1 : 0)">
-                  </b-form-checkbox>
-                  <b-form-checkbox v-else disabled :checked="data.item.free_time == 1">
-                  </b-form-checkbox>
-                </span>
-              </template>
-              <!-- Column: Actions -->
-              <template #cell(actions)="data">
-                <div v-if="data.item.status === 1">
-                  <b-button v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="outline-primary" class="btn-icon mr-50">
-                    <feather-icon :id="`invoice-row-${data.item.id}-preview-icon`" icon="CheckIcon" size="16"
-                      @click="submitUser(data.item.id)" />
-                  </b-button>
-                  <b-button v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="outline-danger" class="btn-icon mr-50">
-                    <feather-icon :id="`invoice-row-${data.item.id}-preview-icon`" icon="TrashIcon" size="16"
-                      @click="deleteUser(data.item.id)" />
-                  </b-button>
-                </div>
-                <div v-else>
-
-                </div>
-              </template>
 
 
             </b-table>
@@ -244,7 +169,7 @@
 
     <b-card class="p-0">
       <div class="d-flex justify-content-center">
-        <h2><b>{{ selectedDate }} - ABSENT STAFF</b></h2>
+        <h5><b>{{ selectedDate }} - ABSENT STAFF</b></h5>
       </div>
       <div class="mt-2">
         <b-row>
@@ -258,7 +183,7 @@
 
       </div>
 
-      <b-row class="m-2">
+      <b-row class="my-1">
         <b-col cols="12">
           <b-overlay :show="tableLoading" rounded="sm">
             <b-table ref="table" :current-page="currentPage2" :fields="fields2" :items="attendence_pending_carts"
@@ -270,15 +195,13 @@
                 <b-media vertical-align="center">
                   <b-row class="align-items-center">
                     <b-col cols="auto">
-                      <b-avatar size="40" :src="'http://127.0.0.1:8000/' + data.item.image"
-                        :to="{ name: 'view-staff-details', params: { id: data.item.id } }" />
+                          <b-avatar size="40" :src="imageUrl + data.item.image" />
                     </b-col>
                     <b-col>
-                      <b-link :to="{ name: 'view-staff-details', params: { id: data.item.id } }"
-                        class="font-weight-bold d-block text-nowrap">
                         {{ data.item.full_name }}
-                      </b-link>
-                      <small> @{{ data.item.user_name }}</small>
+                      <div> @{{ data.item.user_name }}</div>
+                      <div> {{ data.item.address }}</div>
+                      <div> {{ data.item.phone_no }}</div>
 
                     </b-col>
                   </b-row>
@@ -483,7 +406,8 @@ export default {
   },
   mixins: [ErrorMessages, SuccessMessage, MomentMixin, Filter],
   data() {
-    return {
+    return { 
+      imageUrl: process.env.VUE_APP_IMAGE_URL,
       selectedDate: new Date().toISOString().split('T')[0],
       attendence_carts: [],
       attendence_pending_carts: [],
@@ -577,73 +501,13 @@ export default {
           label: "name",
           sortable: true,
         },
-        {
-          key: "check_in_time",
-          label: "Check-In",
-          sortable: true,
-        },
-        {
-          key: "check_out_time",
-          label: "Check-Out",
-          sortable: true,
-        },
-        {
-          key: "work_time",
-          label: "Time Period Hour",
-          sortable: true,
-        },
-        {
-          key: "free_time",
-          label: "Free Time",
-          sortable: true,
-        },
-        {
-          key: "extra_time",
-          label: "Extra Free Time (MIN)",
-          sortable: true,
-        },
-        {
-          key: "total_time",
-          label: "Total Free Time (H)",
-          sortable: true,
-        },
-        {
-          key: "work_time_period",
-          label: "Working Hour",
-          sortable: true,
-        },
-        {
-          key: "final_time_period",
-          label: "Final Working Hour",
-          sortable: true,
-        },
-        {
-          key: "actions",
-          label: "actions",
-        },
       ],
 
       fields2: [
         {
-          key: "user_code",
-          label: "code",
-        },
-        {
           key: "users_user_name",
           label: "name",
           sortable: true,
-        },
-        {
-          key: "address",
-          label: "address",
-        },
-        {
-          key: "phone_no",
-          label: "mobile number",
-        },
-        {
-          key: "job_role",
-          label: "role",
         },
       ],
       items: [],
@@ -801,7 +665,7 @@ export default {
         const dataArray = Response.data.data.map((x) => ({
           id: x.id,
           user_code: x.users_user_code,
-          users_user_name: x.users_user_name,
+          user_name: x.users_user_name,
           full_name: x.users_first_name + ' ' + x.users_last_name,
           check_in_time: x.check_in_time ? x.check_in_time : "00:00",
           check_out_time: x.check_out_time ? x.check_out_time : "00:00",
@@ -982,16 +846,14 @@ export default {
 
   mounted() {
 
-    if (JSON.parse(localStorage.getItem('userData')).admin_role !== 'TBSAdmin') {
-      this.$router.push('/')
-    } else {
+
       const yesterday = new Date()
       yesterday.setDate(yesterday.getDate() - 1)
 
       this.selectedDate = yesterday.toISOString().split('T')[0]
       this.getUsers()
       this.getOldUsers();
-    }
+
   }
 };
 </script>
