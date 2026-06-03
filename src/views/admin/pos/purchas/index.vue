@@ -1,275 +1,134 @@
 <template>
   <div>
-    <b-card no-body>
-       <b-row class="invoice-actions invoice-header">
+    <b-row class="invoice-actions invoice-header">
 
-        <b-col cols="12">
-          <b-card class="header-card">
+      <b-col cols="12">
+        <b-card class="header-card">
 
-            <div class="header-wrapper">
+          <div class="header-wrapper">
 
-              <div class="left-section">
-               
+            <div class="left-section">
 
-                <div class="title">
-                  <h5 class="mb-0">
-                    Product Purchase
-                  </h5>
-                </div>
-              </div>
 
-              <div class="center-section">
-                <span>📅 {{ currentDate }}</span>
-                <span class="mx-2">|</span>
-                <span>⏰ {{ currentTime }}</span>
+              <div class="title">
+                <h5 class="mb-0">
+                  Product Purchase
+                </h5>
               </div>
             </div>
+          </div>
 
-          </b-card>
-        </b-col>
+        </b-card>
+      </b-col>
 
-      </b-row>
-      <b-modal size="lg" id="modal-prevent-closing-lorry" centered ref="my-modal-lorry" title="Add New Vehicle"
-        ok-title="Submit" cancel-variant="outline-secondary" @show="resetModalLorry" @hidden="resetModalLorry"
-        @ok="handleOkLorry">
-        <form ref="form" @submit.stop.prevent="handleSubmitLorry">
+    </b-row>
+    <div>
+      <b-row>
+        <b-col md="12">
+          <!-- Table Top -->
+          <b-row>
 
+            <!-- Per Page -->
+            <b-col cols="12" md="5" class="d-flex align-items-center justify-content-start mb-1 mb-md-0">
+              <label>Entries</label>
+              <v-select v-model="pagination.perPage" :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :options="pageOptions" :clearable="false" class="per-page-selector d-inline-block ml-50 mr-1" />
+            </b-col>
 
-          <b-form-group label="Select Supplier">
-            <v-select v-model="lorry.supplier_id" label="label" :options="groups" :reduce="item => item.id"
-              class="custom-v-select" required />
-          </b-form-group>
+            <!-- Search -->
+            <b-col cols="12" md="7">
+              <div class="d-flex align-items-center justify-content-end">
+                <b-form-input v-model="filters['name_or_email']" class="d-inline-block mr-1" placeholder="Search..." />
 
-          <!-- Lorry Number -->
-          <b-form-group label="Vehicle Number" class="mb-5">
-            <b-form-input v-model="lorry.lorry_number" :state="lorry_number_status" required />
-          </b-form-group>
-        </form>
-      </b-modal>
-      <div class="m-2">
-        <b-row>
-          <b-col sm="12" md="6" lg="4">
-            <b-form-group label="Select Vehicle">
-              <v-select v-model="filters['lorry_number']" label="label" :options="vehicle_groups"
-                :reduce="item => item.id" required @input="addSubItemData" class="modern-select"
-                placeholder="🔍 Search items...">
+              </div>
+            </b-col>
+          </b-row>
 
-                <!-- Custom option rendering -->
-                <template #option="{ label, status }">
-                  <div :style="{
-                    backgroundColor: status == 5 ? 'transparent' : '#d6ecff',
-                    padding: '6px',
-                    borderRadius: '4px'
-                  }">
-                    {{ label }}
-                  </div>
-                </template>
+          <b-row class="mt-2">
+            <b-col cols="12">
+              <b-row>
+                <b-col sm="12" md="12" lg="6" xl="4" v-for="project in getData" :key="project.id" class="mb-2">
+                  <b-card class="custom-card" :class="project.active_status == 1 ? 'card-assigned' : 'card-pending'">
+                    <div class="card-inner">
 
-              </v-select>
-            </b-form-group>
-          </b-col>
-          <b-col sm="12" md="6" lg="4">
-            <b-row>
-              <b-col cols="9">
-                <b-form-group label="Supplier Name" class="modern-group">
-                  <b-input-group class="modern-input-group">
-
-                    <b-input-group-prepend>
-                      <span class="input-icon">🏢</span>
-                    </b-input-group-prepend>
-
-                    <b-form-input disabled v-model="form.user_name" :state="user_name_status" class="modern-input"
-                      placeholder="Supplier name" />
-                  </b-input-group>
-                </b-form-group>
-              </b-col>
-              <b-col cols="3">
-                <div class="mt-50">
-                  <b-button class="mt-2 modern-btn" id="toggle-btn-price" v-b-modal.modal-prevent-closing-price>
-                    <span class="align-middle"> Add</span>
-                  </b-button>
-                  <b-modal id="modal-prevent-closing-price" centered ref="my-modal-price" title="Add New Supplier"
-                    ok-title="Submit" cancel-variant="outline-secondary" @show="resetModalPrice"
-                    @hidden="resetModalPrice" @ok="handleOkPrice">
-                    <form ref="form" @submit.stop.prevent="handleSubmitPrice">
-
-                      <b-col sm="12" md="12">
-                        <b-form-group label="Supplier Name" label-for="supplier_name"
-                          invalid-feedback="User name required">
-                          <b-form-input ref="codeInput" id="supplier_name" v-model="supplier_name"
-                            :state="supplier_name_status" placeholder="Enter supplier name" required />
-                        </b-form-group>
-                      </b-col>
-
-
-                      <b-col sm="12" md="12">
-                        <b-form-group label="Address" label-for="address" invalid-feedback="Address is required">
-                          <b-form-input id="address" v-model="address" :state="address_status"
-                            placeholder="Enter Address" />
-                        </b-form-group>
-                      </b-col>
-
-                      <b-col sm="12" md="12">
-                        <b-form-group label="Mobile Number" label-for="phone"
-                          invalid-feedback="Mobile Number is required">
-                          <b-form-input id="phone" v-model="phone_no" :state="phone_no_status"
-                            placeholder="Enter mobile number" />
-                        </b-form-group>
-                      </b-col>
-
-
-                      <b-col sm="12" md="12">
-                        <b-form-group label="Vehicle Number" label-for="vehicle"
-                          invalid-feedback="Vehicle Number is required">
-                          <b-form-input id="vehicle" v-model="vehicle_number" :state="vehicle_number_status"
-                            placeholder="Enter vehicle number" />
-                        </b-form-group>
-                      </b-col>
-                    </form>
-                  </b-modal>
-                </div>
-              </b-col>
-            </b-row>
-
-          </b-col>
-          <b-col sm="12" md="6" lg="4">
-            <b-form-group label="Driver Name">
-              <v-select :disabled="company_vehicle !== 4" v-model="driver_id" :options="driver_groups" label="label"
-                class="modern-select" :reduce="item => item.id" required @input="addDriverData">
-
-                <!-- Custom option rendering -->
-                <template #option="{ label, status }">
-                  <div :style="{
-                    backgroundColor: status == 1 ? '#d6ecff' : 'transparent',
-                    padding: '6px',
-                    borderRadius: '4px'
-                  }">
-                    {{ label }}
-                  </div>
-                </template>
-
-              </v-select>
-            </b-form-group>
-          </b-col>
-
-          <b-col sm="12" md="12" lg="12">
-            <div class="my-1 d-flex justify-content-start ">
-              <b-button id="toggle-btn-price" class="modern-btn" @click="addNewOrder">
-                <span class="align-middle"> Add New Order</span>
-              </b-button>
-            </div>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col md="12">
-            <!-- Table Top -->
-            <b-row>
-
-              <!-- Per Page -->
-              <b-col cols="12" md="5" class="d-flex align-items-center justify-content-start mb-1 mb-md-0">
-                <label>Entries</label>
-                <v-select v-model="pagination.perPage" :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  :options="pageOptions" :clearable="false" class="per-page-selector d-inline-block ml-50 mr-1" />
-              </b-col>
-
-              <!-- Search -->
-              <b-col cols="12" md="7">
-                <div class="d-flex align-items-center justify-content-end">
-                  <b-form-input v-model="filters['name_or_email']" class="d-inline-block mr-1"
-                    placeholder="Search..." />
-
-                </div>
-              </b-col>
-            </b-row>
-
-            <b-row class="mt-2">
-              <b-col cols="12">
-                <b-row>
-                  <b-col sm="12" md="12" lg="6" xl="4" v-for="project in getData" :key="project.id" class="mb-2">
-                    <b-card class="custom-card" :class="project.active_status == 1 ? 'card-assigned' : 'card-pending'"
-                      @click="handleCardClick(project)">
-                      <div class="card-inner">
-
-                        <!-- Top Badge -->
-                        <div class="top-row">
-                          <span class="invoice-badge">
-                            #{{ String(project.id).padStart(4, '0') }}
-                          </span>
-                        </div>
-
-                        <!-- Main Info -->
-                        <div class="main-content">
-                          <div class="lorry-number">
-                            🚚 {{ project.lorry_number }}
-                          </div>
-
-                          <div class="supplier-name">
-                            {{ project.supplier_name }}
-                          </div>
-                        </div>
-
-                        <!-- Bottom Info -->
-                        <div class="bottom-row">
-                          <div class="info-item">
-                            ⏱ <span>{{ project.order_time }}</span>
-                          </div>
-
-                          <div class="info-item price">
-                            💰 Rs. {{
-                              Number(project.payment).toLocaleString(undefined, {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                              })
-                            }}
-                          </div>
-                        </div>
-
+                      <!-- Top Badge -->
+                      <div class="top-row">
+                        <span class="invoice-badge">
+                          #{{ String(project.id).padStart(4, '0') }}
+                        </span>
                       </div>
-                    </b-card>
-                  </b-col>
-                </b-row>
-                <b-row>
-                  <b-col class="
+
+                      <!-- Main Info -->
+                      <div class="main-content">
+                        <div class="lorry-number">
+                          🚚 {{ project.lorry_number }}
+                        </div>
+
+                        <div class="supplier-name">
+                          {{ project.supplier_name }}
+                        </div>
+                      </div>
+
+                      <!-- Bottom Info -->
+                      <div class="bottom-row">
+                        <div class="info-item">
+                          ⏱ <span>{{ project.order_time }}</span>
+                        </div>
+
+                        <div class="info-item price">
+                          💰 Rs. {{
+                            Number(project.payment).toLocaleString(undefined, {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2
+                            })
+                          }}
+                        </div>
+                      </div>
+
+                    </div>
+                  </b-card>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col class="
                                                   d-flex
                                                   align-items-center
                                                   justify-content-center justify-content-sm-start
                                               " cols="12" sm="6">
-                    <span v-if="pagination.totalRows !== 0" class="text-muted">Showing {{ pagination.from }} to {{
-                      pagination.to }} of
-                      {{ pagination.totalRows }} entries</span>
-                    <span v-else class="text-muted">Showing 0 to 0 of 0 entries</span>
-                  </b-col>
+                  <span v-if="pagination.totalRows !== 0" class="text-muted">Showing {{ pagination.from }} to {{
+                    pagination.to }} of
+                    {{ pagination.totalRows }} entries</span>
+                  <span v-else class="text-muted">Showing 0 to 0 of 0 entries</span>
+                </b-col>
 
-                  <b-col class="
+                <b-col class="
                                                   d-flex
                                                   align-items-center
                                                   justify-content-center justify-content-sm-end" cols="12" sm="6">
-                    <b-pagination v-model="currentPage" :per-page="pagination.perPage"
-                      :total-rows="pagination.totalRows" first-number last-number next-class="next-item"
-                      prev-class="prev-item" class="pagination-primary">
-                      <template #prev-text>
-                        <feather-icon icon="ChevronLeftIcon" size="18" class="pagination-primary" />
-                      </template>
+                  <b-pagination v-model="currentPage" :per-page="pagination.perPage" :total-rows="pagination.totalRows"
+                    first-number last-number next-class="next-item" prev-class="prev-item" class="pagination-primary">
+                    <template #prev-text>
+                      <feather-icon icon="ChevronLeftIcon" size="18" class="pagination-primary" />
+                    </template>
 
-                      <template #next-text>
-                        <feather-icon icon="ChevronRightIcon" size="18" />
-                      </template>
-                    </b-pagination>
-                  </b-col>
-                </b-row>
+                    <template #next-text>
+                      <feather-icon icon="ChevronRightIcon" size="18" />
+                    </template>
+                  </b-pagination>
+                </b-col>
+              </b-row>
 
-                <b-overlay :show="tableLoading" rounded="sm">
-                  <b-table ref="table" :current-page="currentPage" :items="getUsers" :filter="filters['id_or_cus_id']"
-                    :filter-included-fields="filterOn">
-                  </b-table>
-                </b-overlay>
+              <b-overlay :show="tableLoading" rounded="sm">
+                <b-table ref="table" :current-page="currentPage" :items="getUsers" :filter="filters['id_or_cus_id']"
+                  :filter-included-fields="filterOn">
+                </b-table>
+              </b-overlay>
 
-              </b-col>
-            </b-row>
-          </b-col>
-        </b-row>
-      </div>
-    </b-card>
+            </b-col>
+          </b-row>
+        </b-col>
+      </b-row>
+    </div>
   </div>
 </template>
 
@@ -957,10 +816,6 @@ export default {
   },
 
   mounted() {
-
-    if (JSON.parse(localStorage.getItem('userData')).admin_role !== 'TBSAdmin' && JSON.parse(localStorage.getItem('userData')).admin_role !== 'TBSAccountant') {
-      this.$router.push('/')
-    }
 
     this.groupData()
     this.driverGroupData()

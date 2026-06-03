@@ -1,8 +1,7 @@
 <template>
   <div>
-    <b-card no-body>
 
-      <div class="m-2">
+      <div>
 
         <!-- Table Top -->
         <b-row>
@@ -18,118 +17,54 @@
           <b-col cols="12" md="7">
             <div class="d-flex align-items-center justify-content-end">
               <b-form-input v-model="filters['name_or_email']" class="d-inline-block mr-1" placeholder="Search..." />
-              <b-button class="single-line-text" variant="primary" id="toggle-btn-price"Add New Company Vehicle
-                v-ripple.400="'rgba(113, 102, 240, 0.15)'" v-b-modal.modal-prevent-closing-price>
-                <span class="align-middle"> Add Company</span>
-              </b-button>
-              <b-modal id="modal-prevent-closing-price" centered ref="my-modal-price" title="Add New Company"
-                ok-title="Submit" cancel-variant="outline-secondary" @show="resetModalPrice" @hidden="resetModalPrice"
-                @ok="handleOkPrice">
-                <form ref="form" @submit.stop.prevent="handleSubmitPrice">
-
-                  <b-col sm="12" md="12">
-                    <b-form-group label="Company Name" label-for="company_name" invalid-feedback="User name required">
-                      <b-form-input ref="codeInput" id="company_name" v-model="company_name"
-                        :state="company_name_status" placeholder="Enter company name" required />
-                    </b-form-group>
-                  </b-col>
-
-
-                  <b-col sm="12" md="12">
-                    <b-form-group label="Address" label-for="address" invalid-feedback="Address is required">
-                      <b-form-input id="address" v-model="address" :state="address_status"
-                        placeholder="Enter Address" />
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col sm="12" md="12">
-                    <b-form-group label="Mobile Number" label-for="phone" invalid-feedback="Mobile Number is required">
-                      <b-form-input id="phone" v-model="phone_no" :state="phone_no_status"
-                        placeholder="Enter mobile number" />
-                    </b-form-group>
-                  </b-col>
-                </form>
-              </b-modal>
             </div>
           </b-col>
         </b-row>
 
       </div>
 
-      <b-row class="m-2">
+      <b-row>
         <b-col cols="12">
           <b-overlay :show="tableLoading" rounded="sm">
             <b-table ref="table" :current-page="currentPage" :fields="fields" :items="getUsers"
               :per-page="pagination.perPage" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
               :sort-direction="sortDirection" :filter="filter" :filter-included-fields="filterOn"
               class="mobile_table_css" hover responsive>
-
-              <template #cell(active_status)="data">
-                <b-badge v-if="data.item.active_status == '1'" class="ml-1" style="padding: 8px"
-                  variant="light-success">
-                  Active
-                </b-badge>
-                <b-badge v-if="data.item.active_status == '2'" class="ml-1" style="padding: 8px"
-                  variant="light-warning">
-                  InActive
-                </b-badge>
-              </template>
-
-              <template #cell(buy)="data">
-                <span class="text-primary"> {{ data.item.buy }}</span>
-                </template>
-
-                <template #cell(loan)="data">
-                <span class="text-danger"> {{ data.item.loan }}</span>
-                </template>
-
-
-
-              <!-- Column: Actions -->
               <template #cell(actions)="data">
+                <b-card class="custom-card card-pending">
+                  <div class="card-inner">
 
-                <div class="text-nowrap">
+                    <!-- Top Badge -->
+                    <div class="top-row">
+                      <span class="invoice-badge">
+                        {{ data.item.phone_no }}
+                      </span>
+                    </div>
 
-                  <b-dropdown v-if="userData.id == 1" variant="link" toggle-class="p-0" no-caret
-                    :right="$store.state.appConfig.isRTL">
+                    <!-- Main Info -->
+                    <div class="main-content">
+                      <div class="lorry-number">
+                        👷 {{ data.item.company_name }}
+                      </div>
 
-                    <template #button-content>
-                      <b-button v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="outline-primary"
-                        class="btn-icon mr-50">
-                        <feather-icon icon="MoreVerticalIcon" size="16" class="align-middle text-body" />
-                      </b-button>
-                    </template>
-                    <b-dropdown-item :to="{ name: 'view-company-details', params: { id: data.item.id } }">
-                      <feather-icon icon="EyeIcon" />
-                      <span class="align-middle ml-50">view</span>
-                    </b-dropdown-item>
-                    <b-dropdown-item v-if="data.item.active_status != '4'" :to="{ name: 'edit-company-details', params: { id: data.item.id } }">
-                      <feather-icon icon="EditIcon" />
-                      <span class="align-middle ml-50">Edit</span>
-                    </b-dropdown-item>
-                    <b-dropdown-item v-if="data.item.active_status != '4'" @click="deleteCompany(data.item.id)">
-                      <feather-icon icon="TrashIcon" />
-                      <span class="align-middle ml-50">Delete</span>
-                    </b-dropdown-item>
-                  </b-dropdown>
-                  <b-dropdown v-else variant="link" toggle-class="p-0" no-caret :right="$store.state.appConfig.isRTL">
+                      <div class="supplier-name">
+                        {{ data.item.address }}
+                      </div>
+                    </div>
 
-                    <template #button-content>
-                      <b-button v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="outline-primary"
-                        class="btn-icon mr-50">
-                        <feather-icon icon="MoreVerticalIcon" size="16" class="align-middle text-body" />
-                      </b-button>
-                    </template>
-                    <b-dropdown-item :to="{ name: 'view-company-details', params: { id: data.item.id } }">
-                      <feather-icon icon="EyeIcon" />
-                      <span class="align-middle ml-50">view</span>
-                    </b-dropdown-item>
-                    <b-dropdown-item v-if="data.item.active_status != '4'" :to="{ name: 'edit-company-details', params: { id: data.item.id } }">
-                      <feather-icon icon="EditIcon" />
-                      <span class="align-middle ml-50">Edit</span>
-                    </b-dropdown-item>
-                  </b-dropdown>
-                </div>
+                    <!-- Bottom Info -->
+                    <div class="bottom-row">
+                      <div class="info-item">
+                        💵 <span> {{ data.item.loan }}</span>
+                      </div>
+
+                      <div class="info-item price">
+                        💰 {{ data.item.buy }}
+                      </div>
+                    </div>
+
+                  </div>
+                </b-card>
               </template>
 
             </b-table>
@@ -153,7 +88,7 @@
         justify-content-center justify-content-sm-start
       " cols="12" sm="6">
           <span v-if="pagination.totalRows !== 0" class="text-muted">Showing {{ pagination.from }} to {{ pagination.to
-            }} of
+          }} of
             {{ pagination.totalRows }} entries</span>
           <span v-else class="text-muted">Showing 0 to 0 of 0 entries</span>
         </b-col>
@@ -174,7 +109,6 @@
           </b-pagination>
         </b-col>
       </b-row>
-    </b-card>
   </div>
 </template>
 
@@ -309,32 +243,8 @@ export default {
 
       fields: [
         {
-          key: "company_name",
-          label: "company name",
-        },
-        {
-          key: "address",
-          label: "address",
-        },
-        {
-          key: "phone_no",
-          label: "mobile number",
-        },
-        {
-          key: "buy",
-          label: "Credit Amount",
-        },
-        {
-          key: "loan",
-          label: "Outstanding Loan",
-        },
-        {
-          key: "active_status",
-          label: "status",
-        },
-        {
           key: "actions",
-          label: "actions",
+          label: "companies",
         },
 
 
@@ -390,46 +300,7 @@ export default {
       }
     },
 
-    async deleteCompany(id) {
-      this.$swal({
-        title: 'Are you sure you want to delete this company?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, delete',
-        cancelButtonText: 'No, go back',
-        customClass: {
-          confirmButton: 'btn btn-primary',
-          cancelButton: 'btn btn-outline-danger ml-1'
-        },
-        buttonsStyling: false
-      }).then(async result => {
-        if (result.value) {
-          try {
-            this.tableLoading = true
 
-            await admin.companyDelete(id)
-
-            this.showSuccessMessage('Company has been deleted')
-            this.refreshTable()
-
-          } catch (error) {
-            // ✅ SHOW BACKEND ERROR MESSAGE
-            let msg = error.response?.data?.error || 'Something went wrong'
-
-            this.$swal({
-              icon: 'error',
-              title: 'Delete Failed',
-              text: msg
-            })
-          } finally {
-            this.tableLoading = false
-          }
-
-        } else if (result.dismiss === 'cancel') {
-          this.showSuccessMessage('Cancelled')
-        }
-      })
-    },
 
     refreshTable() {
       this.$refs.table.refresh()
@@ -439,85 +310,10 @@ export default {
       this.$refs.table.refresh();
     },
 
-    checkFormValidityPrice() {
-      const valid = this.$refs.form.checkValidity()
-      this.company_name_status = valid
-      this.address_status = valid
-      this.phone_no_status = valid
-      return valid
-    },
-
-    resetModalPrice() {
-      this.company_name = ''
-      this.address = ''
-      this.phone_no = ''
-
-      this.company_name_status = null
-      this.address_status = null
-      this.phone_no_status = null
-    },
-
-    handleOkPrice(bvModalEvt) {
-      // Prevent modal from closing
-      bvModalEvt.preventDefault()
-      // Trigger submit handler
-      this.handleSubmitPrice()
-    },
-
-    handleSubmitPrice() {
-      // Exit when the form isn't valid
-      if (!this.checkFormValidityPrice()) {
-        return
-      }
-      this.submittedPriceNames.push(
-        this.company_name,
-        this.address,
-        this.phone_no,
-      )
-      this.companyCompany(
-        this.company_name,
-        this.address,
-        this.phone_no,
-      )
-
-      // Hide the modal manually
-      this.$nextTick(() => {
-        this.$refs['my-modal-price'].toggle('#toggle-btn-price')
-      })
-    },
-
-    async companyCompany(company_name, address, phone_no) {
-      try {
-        this.payload = {
-          company_name: company_name,
-          address: address,
-          phone_no: phone_no,
-        }
-        this.isLoading = true
-        const response = await admin.companyCreate(this.payload)
-        this.showSuccessMessage('Create Company Successfully')
-        this.$refs.table.refresh();
-        this.isLoading = false
-      } catch (error) {
-        error.response.data.data.company_name ? this.showErrorMessage('The Company name has been already taken.') : ''
-        error.response.data.data.phone_no ? this.showErrorMessage('The Mobile number has been already taken.') : ''
-        error.response.data.data.vehicle_number ? this.showErrorMessage('The Vehicle number has been already taken.') : ''
-
-        this.isLoading = false
-      }
-      this.getUsers()
-      this.$refs.table.refresh();
-    },
-
   },
-
   mounted() {
-    if (JSON.parse(localStorage.getItem('userData')).admin_role == 'TBSAdmin' || JSON.parse(localStorage.getItem('userData')).admin_role == 'TBSAccountant') {
-
-    } else {
-      this.$router.push('/')
-    }
-  },
+    this.getUsers()
+  }
 };
 </script>
 <style lang="scss">
@@ -550,4 +346,333 @@ div#dropdown-1 .btn-outline-danger {
 button {
   height: 38px;
 }
+</style>
+<style lang="scss">
+@import "@core/scss/vue/libs/vue-select.scss";
+
+
+.header-card {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  border-radius: 12px;
+  color: white;
+  padding: 10px 15px;
+}
+
+/* Layout */
+.header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+/* Left */
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title h5 {
+  color: #fff;
+  font-weight: 600;
+  margin: 0;
+}
+
+.title small {
+  color: #dbeafe;
+}
+
+/* Back button */
+.back-btn {
+  background: linear-gradient(135deg, #1e3a8a, #1e3a8a);
+  border: none;
+  color: white;
+  border-radius: 10px;
+}
+
+/* Center */
+.center-section {
+  font-weight: 500;
+  color: #e0f2fe;
+}
+
+/* Right */
+.logout-icon {
+  cursor: pointer;
+  width: 26px;
+  height: 26px;
+  color: white;
+}
+
+/* Hover */
+.logout-icon:hover {
+  opacity: 0.7;
+}
+
+.modern-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 6px;
+}
+
+.modern-input {
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  transition: 0.25s ease;
+  font-weight: 500;
+}
+
+.modern-input:focus {
+  border-color: #7c8cff;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0);
+  background: #fff;
+}
+
+/* Modal content polish */
+.modal-content {
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #dfdeff, #7c8cff);
+  color: white;
+  font-weight: 600;
+}
+
+.modal-footer {
+  border-top: 1px solid #f1f1f1;
+}
+
+.modern-btn {
+  background: linear-gradient(135deg, #4e73df, #224abe);
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.modern-group label {
+  font-weight: 600;
+  font-size: 13px;
+  color: #ffffff;
+}
+
+.modern-input-group {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  transition: all 0.3s ease;
+}
+
+.modern-input-group:focus-within {
+  border-color: #7c8cff;
+  box-shadow: 0 0 0 3px rgba(124, 140, 255, 0.2);
+}
+
+.input-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  background: #eef2ff;
+  font-size: 16px;
+}
+
+.modern-input {
+  border: none !important;
+  background: transparent !important;
+  font-weight: 600;
+  color: #2c3e50;
+  height: 42px;
+}
+
+.modern-select .vs__dropdown-toggle {
+  border-radius: 12px;
+  padding: 8px;
+}
+
+div#dropdown-1 .btn-outline-danger {
+  border: none !important;
+}
+
+.custom-card {
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  border: none;
+}
+
+.custom-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Card States */
+.card-assigned {
+  background: linear-gradient(135deg, #d6ecff, #b3daff);
+}
+
+.card-pending {
+  background: linear-gradient(135deg, #d6ffaa, #b8f28a);
+}
+
+.custom-card {
+  border: none;
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  background: #ffffff;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover Magic */
+.custom-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+/* Assigned / Pending Styles */
+.card-assigned {
+  background: linear-gradient(135deg, #54ffb2, #ffffff);
+  border-left: 5px solid #28c76f;
+  box-shadow: 0 6px 18px rgba(40, 199, 111, 0.18);
+}
+
+.card-pending {
+  background: linear-gradient(135deg, #ffc87f, #ffffff);
+  border-left: 5px solid #ff9f43;
+  box-shadow: 0 6px 18px rgba(255, 159, 67, 0.18);
+}
+
+/* Inner Layout */
+.card-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Top Badge */
+.top-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.invoice-badge {
+  background: #7367f0;
+  color: white;
+  padding: 4px 10px;
+  font-size: 1.0rem;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+/* Main Content */
+.main-content {
+  text-align: center;
+}
+
+.lorry-number {
+  font-size: 1.0rem;
+  font-weight: 700;
+  color: #000000;
+}
+
+.supplier-name {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #000000;
+  margin-top: 4px;
+}
+
+/* Bottom Row */
+.bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* Info Items */
+.info-item {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.info-item.price {
+  color: #f80000;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+/* Subtle Glow Effect */
+.custom-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(120deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent);
+  transform: rotate(25deg);
+  transition: 0.5s;
+}
+
+.custom-card:hover::before {
+  left: 100%;
+}
+
+.per-page-selector {
+  width: 90px;
+}
+
+.single-line-text {
+  width: 180px;
+}
+
+.invoice-filter-select {
+  min-width: 190px;
+}
+
+::v-deep .vs__selected-options {
+  flex-wrap: nowrap;
+}
+
+::v-deep .vs__selected {
+  width: 100px;
+}
+
+button {
+  height: 38px;
+}
+
+.row-orange {
+  background-color: #ffa50033 !important;
+  /* light orange */
+}
+
+.row-green {
+  background-color: #39ff2733 !important;
+  /* light green */
+}
+
+
+@import '@core/scss/vue/libs/vue-flatpicker.scss';
 </style>

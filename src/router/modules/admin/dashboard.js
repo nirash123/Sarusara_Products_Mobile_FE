@@ -3,7 +3,93 @@ export default [
     path: '/dashboard',
     name: 'dashboard',
     component: () => import('@/views/dashboard/index.vue'),
+    meta: {
+      redirectIfLoggedIn: true,
+      noAuth: true,
+    },
   },
+
+
+  {
+    path: '/purches-bill',
+    name: 'admin-pos',
+    component: () => import('@/views/admin/pos/purchas/index.vue'),
+    meta: {
+      redirectIfLoggedIn: true,
+      noAuth: true,
+    },
+  },
+
+
+  {
+    path: '/sales-bill',
+    name: 'admin-product-sales',
+    component: () => import('@/views/admin/pos/sell/index.vue'),
+    meta: {
+      redirectIfLoggedIn: true,
+      noAuth: true,
+    },
+  },
+
+  {
+    path: '/plastic-sale',
+    name: 'admin-plastic-sales',
+    component: () => import('@/views/admin/plastic/sell/index.vue'),
+    meta: {
+      redirectIfLoggedIn: true,
+      noAuth: true,
+    },
+  },
+
+  {
+    path: '/plastic-purchase',
+    name: 'admin-plastic-purchases',
+    component: () => import('@/views/admin/plastic/purchas/index.vue'),
+    meta: {
+      redirectIfLoggedIn: true,
+      noAuth: true,
+    },
+  },
+
+
+
+  {
+    path: '/suppliers',
+    name: 'admin-supplier',
+    component: () => import('@/views/admin/supplier/index.vue'),
+    meta: {
+      redirectIfLoggedIn: true,
+      noAuth: true,
+    },
+  },
+
+
+  {
+    path: '/companies',
+    name: 'admin-companies',
+    component: () => import('@/views/admin/company/index.vue'),
+    meta: {
+      redirectIfLoggedIn: true,
+      noAuth: true,
+    },
+  },
+
+    {
+    path: '/admin-loan',
+    name: 'admin-loan',
+    component: () => import('@/views/admin/loan/index.vue'), 
+     meta: {
+      redirectIfLoggedIn: true,
+      noAuth: true,
+    },
+  },
+
+
+
+  ////   
+
+
+
   {
     path: '/order_list',
     name: 'admin-pos-order',
@@ -56,84 +142,6 @@ export default [
 
   },
 
-  {
-    path: '/purches-bill',
-    name: 'admin-pos',
-    component: () => import('@/views/admin/pos/purchas/index.vue'),
-  },
-
-
-  {
-    path: '/sales-bill',
-    name: 'admin-product-sales',
-    component: () => import('@/views/admin/pos/sell/index.vue'),
-  },
-
-  {
-    path: '/plastic-sale',
-    name: 'admin-plastic-sales',
-    component: () => import('@/views/admin/plastic/sell/index.vue'),
-  },
-  {
-    path: '/view-plastic-order/:id',
-    name: 'view-plastic-order',
-    component: () => import('@/views/admin/plastic/sell/view.vue'),
-  },
-
-  {
-    path: '/invoice-plastic-order/:id',
-    name: 'invoice-plastic-order',
-    component: () => import('@/views/admin/plastic/sell/invoice.vue'),
-  },
-
-  {
-    path: '/plastic-purchase',
-    name: 'admin-plastic-purchases',
-    component: () => import('@/views/admin/plastic/purchas/index.vue'),
-  },
-  {
-    path: '/view-plastic-purchase-order/:id',
-    name: 'view-plastic-purchase-order',
-    component: () => import('@/views/admin/plastic/purchas/view.vue'),
-  },
-
-
-  {
-    path: '/view-order/:id',
-    name: 'view-order',
-    component: () => import('@/views/admin/pos/purchas/view.vue'),
-  },
-
-  {
-    path: '/invoice-order/:id',
-    name: 'invoice-order',
-    component: () => import('@/views/admin/pos/purchas/invoice.vue'),
-  },
-
-  {
-    path: '/view-sell-order/:id',
-    name: 'view-sell-order',
-    component: () => import('@/views/admin/pos/sell/view.vue'),
-  },
-
-
-  {
-    path: '/invoice-sell-order/:id',
-    name: 'invoice-sell-order',
-    component: () => import('@/views/admin/pos/sell/invoice.vue'),
-  },
-
-  {
-    path: '/view-plastic-purchas-order/:id',
-    name: 'view-plastic-purchas-order',
-    component: () => import('@/views/admin/plastic/purchas/view.vue'),
-  },
-
-  {
-    path: '/invoice-plastic-purchas-order/:id',
-    name: 'invoice-plastic-purchas-order',
-    component: () => import('@/views/admin/plastic/purchas/invoice.vue'),
-  },
 
   {
     path: '/admin-cash',
@@ -161,11 +169,6 @@ export default [
     component: () => import('@/views/admin/payments/credit/index.vue'),
   },
 
-  {
-    path: '/admin-loan',
-    name: 'admin-loan',
-    component: () => import('@/views/admin/loan/index.vue'),
-  },
 
   {
     path: '/admin-expenses',
@@ -381,6 +384,8 @@ export default [
     component: () => import('@/views/admin/plastic-item/index.vue'),
     meta: {
       pageTitle: 'Plastic Items',
+      redirectIfLoggedIn: true,
+      noAuth: true,
     },
   },
 
@@ -691,22 +696,6 @@ export default [
   },
 
   {
-    path: '/lorrys/edit-supplier-lorry-details/:id',
-    name: 'edit-supplier-lorry-details',
-    component: () => import('@/views/admin/supplier/lorry-edit.vue'),
-    meta: {
-      pageTitle: 'Vehicle',
-      breadcrumb: [
-        {
-          text: 'Edit Vehicle Details',
-          active: true,
-        },
-      ],
-    },
-  },
-
-
-  {
     path: '/lorrys/view-lorry-details/:id',
     name: 'view-lorry-details',
     component: () => import('@/views/admin/driver/lorry/view.vue'),
@@ -736,50 +725,6 @@ export default [
     },
   },
 
-  {
-    path: '/suppliers',
-    name: 'admin-supplier',
-    component: () => import('@/views/admin/supplier/index.vue'),
-    meta: {
-      pageTitle: 'Supplier',
-    },
-  },
-
-
-
-
-
-  {
-    path: '/suppliers/edit-supplier-details/:id',
-    name: 'edit-supplier-details',
-    component: () => import('@/views/admin/supplier/edit.vue'),
-    meta: {
-      pageTitle: 'Supplier',
-      breadcrumb: [
-        {
-          text: 'Edit Supplier Details',
-          active: true,
-        },
-      ],
-    },
-  },
-
-
-
-  {
-    path: '/suppliers/view-supplier-details/:id',
-    name: 'view-supplier-details',
-    component: () => import('@/views/admin/supplier/view.vue'),
-    meta: {
-      pageTitle: 'Supplier',
-      breadcrumb: [
-        {
-          text: 'Supplier Details',
-          active: true,
-        },
-      ],
-    },
-  },
 
   {
     path: '/companies',
@@ -790,36 +735,7 @@ export default [
     },
   },
 
-  {
-    path: '/companies/edit-company-details/:id',
-    name: 'edit-company-details',
-    component: () => import('@/views/admin/company/edit.vue'),
-    meta: {
-      pageTitle: 'Company',
-      breadcrumb: [
-        {
-          text: 'Edit Company Details',
-          active: true,
-        },
-      ],
-    },
-  },
 
-
-  {
-    path: '/companies/view-company-details/:id',
-    name: 'view-company-details',
-    component: () => import('@/views/admin/company/view.vue'),
-    meta: {
-      pageTitle: 'Company',
-      breadcrumb: [
-        {
-          text: 'Company Details',
-          active: true,
-        },
-      ],
-    },
-  },
 
   {
     path: '/low-stock-items',
@@ -931,33 +847,33 @@ export default [
     component: () => import('@/views/admin/invoice/invoices/today-sale-plastic-items.vue'),
   },
 
-  
+
   {
     path: '/sale-plastic-details-invoice',
     name: 'sale-plastic-details-invoice',
     component: () => import('@/views/admin/invoice/invoices/sale-plastic-items.vue'),
   },
 
-   {
+  {
     path: '/today-purchase-plastic-details-invoice',
     name: 'today-purchase-plastic-details-invoice',
     component: () => import('@/views/admin/invoice/invoices/today-purchase-plastic-items.vue'),
   },
 
-     {
+  {
     path: '/purchase-plastic-details-invoice',
     name: 'purchase-plastic-details-invoice',
     component: () => import('@/views/admin/invoice/invoices/purchase-plastic-items.vue'),
   },
 
-  
+
   {
     path: '/total-staff-details-invoice',
     name: 'total-staff-details-invoice',
     component: () => import('@/views/admin/invoice/invoices/total-staff-details.vue'),
   },
 
-  
+
 
   {
     path: '/staff-details-invoice',
@@ -965,20 +881,20 @@ export default [
     component: () => import('@/views/admin/invoice/invoices/staff-details.vue'),
   },
 
-    {
+  {
     path: '/staff-attendences-invoice',
     name: 'staff-attendences-invoice',
     component: () => import('@/views/admin/invoice/invoices/staff-attendence.vue'),
   },
 
 
-    {
+  {
     path: '/company-expenses-invoice',
     name: 'company-expenses-invoice',
     component: () => import('@/views/admin/invoice/invoices/company-expenses.vue'),
   },
 
-    {
+  {
     path: '/today-expenses-invoice',
     name: 'today-expenses-invoice',
     component: () => import('@/views/admin/invoice/invoices/today-expenses.vue'),

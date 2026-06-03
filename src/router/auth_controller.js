@@ -22,7 +22,7 @@ export default {
 
       if (!to.meta.noAuth && !isLogedIn) {
         next({
-          path: '/',
+          path: '/dashboard',
           replace: true,
         })
       }

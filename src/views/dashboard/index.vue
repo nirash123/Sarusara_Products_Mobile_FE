@@ -3,396 +3,39 @@
   <div>
 
     <div class="misc-inner ">
-      <!-- <button @click="cancelZero">CHANGE VALUES 0</button> -->
 
-      <div v-if="userData.admin_role == 'TBSAccountant'" class="">
-
-        <b-row>
-          <b-col md="12" sm="12" class="mb-2 mb-md-0">
-            <b-card no-body class="earnings-card">
-              <div v-if="cashier_start_amount > 0" class="py-3 px-2">
-                <h2 class="font-weight-bolder">
-                  අද දින ආරම්භක ශේෂය
-                </h2>
-                <h3 class="font-weight-bolder mb-0 ">
-                  Rs: {{ cashier_start_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                </h3>
-                <b-img src="@/assets/images/logo/login.png" class="congratulation-medal mt-2" width="100" alt="Login" />
-              </div>
-              <div v-else class="py-3 px-2">
-                <h2 class="font-weight-bolder">
-                  අද දින ආරම්භක ශේෂය
-                </h2>
-                <h3 class="font-weight-bolder mb-0 ">
-                  Rs: {{ cashier_start_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                </h3>
-                <b-button class="congratulation-medal mt-3 " style="width: 250px;" variant="primary"
-                  id="toggle-btn-price" @click="$router.push('/account-setting?tab=2')">
-                  <span class="align-middle">ආරම්භක ශේෂය සැකසීම</span>
-                </b-button>
-              </div>
-
-            </b-card>
-          </b-col>
-
-
-
-          <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-            <b-card no-body class="earnings-card">
-              <b-card-body class="">
-                <b-row>
-                  <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-
-                    <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-success'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
-                      </b-avatar>
-                      <div>
-                        <b-row>
-                          <b-col>
-                            <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
-                                අද දින ආදායම
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1">
-                                <div class="mt-50">Rs:
-                                  {{ cashier_income.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                                </div>
-                              </h3>
-                            </div>
-                          </b-col>
-                        </b-row>
-                      </div>
-                    </div>
-                  </b-col>
-                </b-row>
-              </b-card-body>
-            </b-card>
-          </b-col>
-          <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-            <b-card no-body class="earnings-card">
-              <b-card-body class="">
-                <b-row>
-                  <b-col md="3" sm="12" class="mb-2 mb-md-0">
-
-                    <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-primary'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
-                      </b-avatar>
-                      <div>
-                        <b-row>
-                          <b-col>
-                            <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
-                                අද දින ඉතිරිය
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1">
-                                <div class="mt-50">Rs:
-                                  {{ ((cashier_income -
-                                    cashier_expenditure).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                                </div>
-                              </h3>
-                            </div>
-                          </b-col>
-                        </b-row>
-                      </div>
-                    </div>
-                  </b-col>
-                </b-row>
-              </b-card-body>
-            </b-card>
-          </b-col>
-
-          <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-            <b-card no-body class="earnings-card">
-              <b-card-body class="">
-                <b-row>
-                  <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-
-                    <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-danger'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
-                      </b-avatar>
-                      <div>
-                        <b-row>
-                          <b-col>
-                            <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
-                                අද දින වියදම
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1 ">
-                                <div class="mt-50">Rs:
-                                  {{ (cashier_expenditure).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                                </div>
-                              </h3>
-                            </div>
-                          </b-col>
-                        </b-row>
-                      </div>
-                    </div>
-                  </b-col>
-                </b-row>
-              </b-card-body>
-            </b-card>
-          </b-col>
-
-          <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-            <b-card no-body class="earnings-card">
-              <b-card-body class="">
-                <b-row>
-                  <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-
-                    <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-success'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
-                      </b-avatar>
-                      <div>
-                        <b-row>
-                          <b-col>
-                            <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
-                                අද දින ආයතනය ලාභය රඳවා ගැනීම
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1">
-                                <div class="mt-50">Rs:
-                                  {{ cashier_hold_profit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                                </div>
-                              </h3>
-                            </div>
-                          </b-col>
-                        </b-row>
-                      </div>
-                    </div>
-                  </b-col>
-                </b-row>
-              </b-card-body>
-            </b-card>
-          </b-col>
-          <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-            <b-card no-body class="earnings-card">
-              <b-card-body class="">
-                <b-row>
-                  <b-col md="3" sm="12" class="mb-2 mb-md-0">
-
-                    <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-primary'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
-                      </b-avatar>
-                      <div>
-                        <b-row>
-                          <b-col>
-                            <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
-                                අද දින ආයතනය ලාභ අලාභ වෙනස
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1">
-                                <div class="mt-50">Rs:
-                                  {{ ((cashier_hold_profit -
-                                    cashier_hold_loss).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                                </div>
-                              </h3>
-                            </div>
-                          </b-col>
-                        </b-row>
-                      </div>
-                    </div>
-                  </b-col>
-                </b-row>
-              </b-card-body>
-            </b-card>
-          </b-col>
-
-          <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-            <b-card no-body class="earnings-card">
-              <b-card-body class="">
-                <b-row>
-                  <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-
-                    <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-danger'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
-                      </b-avatar>
-                      <div>
-                        <b-row>
-                          <b-col>
-                            <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
-                                අද දින ආයතනය පාඩු රඳවා ගැනීම
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1 ">
-                                <div class="mt-50">Rs:
-                                  {{ (cashier_hold_loss).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                                </div>
-                              </h3>
-                            </div>
-                          </b-col>
-                        </b-row>
-                      </div>
-                    </div>
-                  </b-col>
-                </b-row>
-              </b-card-body>
-            </b-card>
-          </b-col>
-          <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-            <b-card no-body class="earnings-card">
-              <b-card-body class="">
-                <b-row>
-                  <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-
-                    <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-warning'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
-                      </b-avatar>
-                      <div>
-                        <b-row>
-                          <b-col>
-                            <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
-                                මුදල් ( {{ (cashier_cash -
-                                  cashier_cash_expenditure).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,
-                                    ",") }} )
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1 ">
-                                <div class="text-primary mt-50">Rs:
-                                  {{ (cashier_cash).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-
-                                  <span class="text-danger mt-50 ml-5">Rs:
-                                    {{ (cashier_cash_expenditure).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                    }}
-                                  </span>
-                                </div>
-                              </h3>
-                            </div>
-                          </b-col>
-                        </b-row>
-                      </div>
-                    </div>
-                  </b-col>
-                </b-row>
-              </b-card-body>
-            </b-card>
-          </b-col>
-          <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-            <b-card no-body class="earnings-card">
-              <b-card-body class="">
-                <b-row>
-                  <b-col md="3" sm="12" class="mb-2 mb-md-0">
-
-                    <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-success'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
-                      </b-avatar>
-                      <div>
-                        <b-row>
-                          <b-col>
-                            <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
-                                කාඩ් ( {{ (cashier_card -
-                                  cashier_card_expenditure).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,
-                                    ",") }} )
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1 ">
-                                <div class="text-primary mt-50">Rs:
-                                  {{ (cashier_card).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-
-                                  <span class="text-danger mt-50 ml-5">Rs:
-                                    {{ (cashier_card_expenditure).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                    }}
-                                  </span>
-                                </div>
-                              </h3>
-                            </div>
-                          </b-col>
-                        </b-row>
-                      </div>
-                    </div>
-                  </b-col>
-                </b-row>
-              </b-card-body>
-            </b-card>
-          </b-col>
-
-          <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-            <b-card no-body class="earnings-card">
-              <b-card-body class="">
-                <b-row>
-                  <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-
-                    <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-info'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
-                      </b-avatar>
-                      <div>
-                        <b-row>
-                          <b-col>
-                            <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
-                                චෙක්පත් ( {{ (cashier_cheque -
-                                  cashier_cheque_expenditure).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,
-                                    ",") }} )
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1 ">
-                                <div class="text-primary mt-50">Rs:
-                                  {{ (cashier_cheque).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-
-                                  <span class="text-danger mt-50 ml-5">Rs:
-                                    {{ (cashier_cheque_expenditure).toString().replace(/\B(?=(\d{3})+(?!\d))/g,
-                                      ",") }}
-                                  </span>
-                                </div>
-                              </h3>
-                            </div>
-                          </b-col>
-                        </b-row>
-                      </div>
-                    </div>
-                  </b-col>
-                </b-row>
-              </b-card-body>
-            </b-card>
-          </b-col>
-        </b-row>
-      </div>
-
-      <!-- Admin Panel  -->
-      <div v-else class="">
 
         <b-row>
           <b-col lg="4" md="12" sm="12" class="mb-2  mb-md-0">
             <b-card no-body class="earnings-card py-1">
               <div class="pt-2 px-2">
-                <h2 class="font-weight-bolder">
+                <h4 class="font-weight-bolder">
                   අද දින මුළු ශේෂය
-                </h2>
-                <h3 class="mb-0 font-weight-bolder">
+                </h4>
+                <h4 class="mb-0 font-weight-bolder">
                   Rs: {{ (bank_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                </h3>
-                <b-img src="@/assets/images/logo/master.png" class="congratulation-medal mt-2" width="80" />
+                </h4>
+                <b-img src="@/assets/images/logo/master.png" class="congratulation-medal mt-2" width="50" />
               </div>
               <div class="py-2 px-2">
-                <h2 class="font-weight-bolder">
+                <h4 class="font-weight-bolder">
                   අද දින බැංකු ශේෂය
-                </h2>
-                <h3 class="mb-0 font-weight-bolder">
+                </h4>
+                <h4 class="mb-0 font-weight-bolder">
                   Rs: {{ (bank_total).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                </h3>
+                </h4>
               </div>
             </b-card>
 
 
-            <b-card v-if="userData.id == 1" no-body class="earnings-card">
+            <b-card  no-body class="earnings-card">
               <div class="py-4 px-2">
-                <h2 class="font-weight-bolder">
+                <h4 class="font-weight-bolder">
                   අද දින ආරම්භක ශේෂය
-                </h2>
-                <h3 class="font-weight-bolder mb-0 ">
+                </h4>
+                <h4 class="font-weight-bolder mb-0 ">
                   Rs: {{ (cashier_start_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                </h3>
-                <b-button class="congratulation-medal mt-3 " variant="primary" id="toggle-btn-price"
-                  @click="$router.push('/account-setting?tab=2')">
-                  <span class="align-middle">සැකසීම</span>
-                </b-button>
+                </h4>
               </div>
             </b-card>
 
@@ -401,13 +44,13 @@
 
               <b-card no-body @click="$router.push('/order_list?tab=3')" class="earnings-card">
                 <div class="py-2 px-2">
-                  <h2 class="font-weight-bolder">
+                  <h4 class="font-weight-bolder">
                     ගෙවීමට ඇති මුදල
-                  </h2>
-                  <h3 class="mb-0 font-weight-bolder">
+                  </h4>
+                  <h4 class="mb-0 font-weight-bolder">
                     Rs: {{ (company).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                  </h3>
-                  <b-img src="@/assets/images/logo/give.png" class="congratulation-medal mt-2" width="80" alt="Login" />
+                  </h4>
+                  <b-img src="@/assets/images/logo/give.png" class="congratulation-medal mt-2" width="50" alt="Login" />
                 </div>
               </b-card>
             </b-card>
@@ -415,13 +58,13 @@
 
               <b-card no-body @click="$router.push('/return-ordres?tab=2')" class="earnings-card">
                 <div class="py-2 px-2">
-                  <h2 class="font-weight-bolder">
+                  <h4 class="font-weight-bolder">
                     ලබාගැනීමට ඇති මුදල
-                  </h2>
-                  <h3 class="mb-0 font-weight-bolder">
+                  </h4>
+                  <h4 class="mb-0 font-weight-bolder">
                     Rs: {{ (sale).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                  </h3>
-                  <b-img src="@/assets/images/logo/buy.png" class="congratulation-medal mt-2" width="80" alt="Login" />
+                  </h4>
+                  <b-img src="@/assets/images/logo/buy.png" class="congratulation-medal mt-2" width="50" alt="Login" />
                 </div>
               </b-card>
             </b-card>
@@ -472,13 +115,13 @@
 
                   <b-card no-body @click="$router.push('/return-ordres?tab=2')" class="earnings-card">
                     <div class="py-2 px-2">
-                      <h2 class="font-weight-bolder">
+                      <h4 class="font-weight-bolder">
                         ලබාගැනීමට ඇති මුළු ණය මුදල
-                      </h2>
-                      <h3 class="mb-0 font-weight-bolder">
+                      </h4>
+                      <h4 class="mb-0 font-weight-bolder">
                         Rs: {{ (loan).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                      </h3>
-                      <b-img src="@/assets/images/logo/buy.png" class="congratulation-medal mt-2" width="80"
+                      </h4>
+                      <b-img src="@/assets/images/logo/buy.png" class="congratulation-medal mt-2" width="50"
                         alt="Login" />
                     </div>
                   </b-card>
@@ -489,13 +132,13 @@
 
                   <b-card no-body class="earnings-card">
                     <div class="py-2 px-2">
-                      <h2 class="font-weight-bolder">
+                      <h4 class="font-weight-bolder">
                         අද දින ණයට ලබා දුන් මුදල
-                      </h2>
-                      <h3 class="mb-0 font-weight-bolder">
+                      </h4>
+                      <h4 class="mb-0 font-weight-bolder">
                         Rs: {{ (loan_get).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                      </h3>
-                      <b-img src="@/assets/images/logo/give.png" class="congratulation-medal mt-2" width="80"
+                      </h4>
+                      <b-img src="@/assets/images/logo/give.png" class="congratulation-medal mt-2" width="50"
                         alt="Login" />
                     </div>
                   </b-card>
@@ -506,13 +149,13 @@
 
                   <b-card no-body class="earnings-card">
                     <div class="py-2 px-2">
-                      <h2 class="font-weight-bolder">
+                      <h4 class="font-weight-bolder">
                         අද දින ණය ලබාගත් මුදල
-                      </h2>
-                      <h3 class="mb-0 font-weight-bolder">
+                      </h4>
+                      <h4 class="mb-0 font-weight-bolder">
                         Rs: {{ (loan_pay).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                      </h3>
-                      <b-img src="@/assets/images/logo/buy.png" class="congratulation-medal mt-2" width="80"
+                      </h4>
+                      <b-img src="@/assets/images/logo/buy.png" class="congratulation-medal mt-2" width="50"
                         alt="Login" />
                     </div>
                   </b-card>
@@ -540,7 +183,7 @@
 
                   <!-- Icon -->
                   <div class="notification-icon">
-                    <feather-icon icon="AlertTriangleIcon" size="24" />
+                    <feather-icon icon="AlertTriangleIcon" size="20" />
                   </div>
 
                   <!-- Content -->
@@ -551,24 +194,22 @@
                           {{ item.category }}
                         </h5>
                         <div class="details-text mb-50">
-                          <feather-icon icon="TruckIcon" size="18" />
+                          <feather-icon icon="TruckIcon" size="14" />
                           <span class="ml-50">{{ item.lorry_number }}</span>
                         </div>
 
                         <div class="details-text mb-50">
-                          <feather-icon icon="UserIcon" size="18" />
+                          <feather-icon icon="UserIcon" size="14" />
                           <span class="ml-50">{{ item.user_name }}</span>
+                        </div>
+                        
+                        <div class="expiry-text text-danger font-weight-bold">
+                          <feather-icon icon="CalendarIcon" size="14" />
+                          <span class="ml-50">Expires: {{ item.expired_date }}</span>
                         </div>
                       </div>
                       <div>
-                        <b-badge variant="light-danger">
-                          Expired
-                        </b-badge>
 
-                        <div class="mt-2 expiry-text text-danger font-weight-bold">
-                          <feather-icon icon="CalendarIcon" size="18" />
-                          <span class="ml-50">Expires: {{ item.expired_date }}</span>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -585,13 +226,13 @@
           <b-col lg="4" md="12" sm="12" class="mb-2 mb-md-0">
             <b-card no-body class="earnings-card">
               <div class="py-3 px-2">
-                <h2 class="font-weight-bolder">
+                <h4 class="font-weight-bolder">
                   ආරම්භක මුළු ශේෂය
-                </h2>
-                <h3 class="mb-0 font-weight-bolder">
+                </h4>
+                <h4 class="mb-0 font-weight-bolder">
                   Rs: {{ (today_start_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                </h3>
-                <b-img src="@/assets/images/logo/login.png" class="congratulation-medal mt-2" width="100" alt="Login" />
+                </h4>
+                <b-img src="@/assets/images/logo/login.png" class="congratulation-medal mt-2" width="50" alt="Login" />
               </div>
             </b-card>
           </b-col>
@@ -605,20 +246,20 @@
                   <b-col lg="6" md="12" sm="12" class=" mb-md-0">
 
                     <div class="my-1 d-sm-flex">
-                      <b-avatar size="50" variant='light-success'>
-                        <feather-icon size="30" icon='BoxIcon' />
+                      <b-avatar size="35" variant='light-success'>
+                        <feather-icon size="20" icon='BoxIcon' />
                       </b-avatar>
                       <div>
                         <b-row>
                           <b-col>
                             <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-1 ml-1">
+                              <h4 class=" font-weight-bolder mb-1 ml-1">
                                 <!-- මුළු ලාභය -->
                                 ප්ලාස්ටික් අයිතම විකුණුම් ලාභය
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1">
+                              </h4>
+                              <h4 class="font-weight-bolder mb-0 ml-1">
                                 Rs {{ (today_profit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                              </h3>
+                              </h4>
                             </div>
                           </b-col>
                         </b-row>
@@ -637,26 +278,26 @@
                   <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
 
                     <div class="my-1 d-sm-flex">
-                      <b-avatar size="45" variant='light-info'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
+                      <b-avatar size="35" variant='light-info'>
+                        <feather-icon size="20" icon='DollarSignIcon' />
                       </b-avatar>
                       <div>
                         <b-row>
                           <b-col>
                             <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
+                              <h4 class=" font-weight-bolder mb-0 ml-1">
                                 මාරු කිරීමට ඇති චෙක්පත්
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1 ">
+                              </h4>
+                              <h4 class="font-weight-bolder mb-0 ml-1 ">
                                 <div class="text-primary mt-50">
-                                  <span @click="$router.push('/admin-cheque?tab=2')">
+                                  <div @click="$router.push('/admin-cheque?tab=2')">
                                     ලබාගැනීමට ඇති : {{ total_income_cheque }}
-                                  </span>
-                                  <span @click="$router.push('/admin-cheque?tab=4')" class="text-danger mt-50 ml-5">
+                                  </div>
+                                  <div @click="$router.push('/admin-cheque?tab=4')" class="text-danger mt-50">
                                     ගෙවීමට ඇති : {{ total_expenditure_cheque }}
-                                  </span>
+                                  </div>
                                 </div>
-                              </h3>
+                              </h4>
                             </div>
                           </b-col>
                         </b-row>
@@ -675,21 +316,21 @@
                   <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
 
                     <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-success'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
+                      <b-avatar size="35" variant='light-success'>
+                        <feather-icon size="20" icon='DollarSignIcon' />
                       </b-avatar>
                       <div>
                         <b-row>
                           <b-col>
                             <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
+                              <h4 class=" font-weight-bolder mb-0 ml-1">
                                 මුළු ආදායම
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1">
+                              </h4>
+                              <h4 class="font-weight-bolder mb-0 ml-1">
                                 <div class="mt-50">Rs:
                                   {{ (today_income).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
                                 </div>
-                              </h3>
+                              </h4>
                             </div>
                           </b-col>
                         </b-row>
@@ -707,22 +348,22 @@
                   <b-col md="3" sm="12" class="mb-2 mb-md-0">
 
                     <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-primary'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
+                      <b-avatar size="35" variant='light-primary'>
+                        <feather-icon size="20" icon='DollarSignIcon' />
                       </b-avatar>
                       <div>
                         <b-row>
                           <b-col>
                             <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
+                              <h4 class=" font-weight-bolder mb-0 ml-1">
                                 මුළු ඉතිරිය
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1">
+                              </h4>
+                              <h4 class="font-weight-bolder mb-0 ml-1">
                                 <div class="mt-50">Rs:
                                   {{ ((today_income -
                                     today_expenditure).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
                                 </div>
-                              </h3>
+                              </h4>
                             </div>
                           </b-col>
                         </b-row>
@@ -741,21 +382,21 @@
                   <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
 
                     <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-danger'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
+                      <b-avatar size="35" variant='light-danger'>
+                        <feather-icon size="20" icon='DollarSignIcon' />
                       </b-avatar>
                       <div>
                         <b-row>
                           <b-col>
                             <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
+                              <h4 class=" font-weight-bolder mb-0 ml-1">
                                 මුළු වියදම
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1 ">
+                              </h4>
+                              <h4 class="font-weight-bolder mb-0 ml-1 ">
                                 <div class="mt-50">Rs:
                                   {{ (today_expenditure).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
                                 </div>
-                              </h3>
+                              </h4>
                             </div>
                           </b-col>
                         </b-row>
@@ -767,105 +408,6 @@
             </b-card>
           </b-col>
 
-
-          <!-- <b-col lg="4" md="12" sm="12" class="mb-2 mb-md-0">
-            <b-card no-body class="earnings-card">
-              <b-card-body class="">
-                <b-row>
-                  <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-
-                    <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-success'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
-                      </b-avatar>
-                      <div>
-                        <b-row>
-                          <b-col>
-                            <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
-                                අද දින ආයතනය ලාභය රඳවා ගැනීම
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1">
-                                <div class="mt-50">Rs:
-                                  {{ total_hold_profit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                                </div>
-                              </h3>
-                            </div>
-                          </b-col>
-                        </b-row>
-                      </div>
-                    </div>
-                  </b-col>
-                </b-row>
-              </b-card-body>
-            </b-card>
-          </b-col>
-          <b-col lg="4" md="12" sm="12" class="mb-2 mb-md-0">
-            <b-card no-body class="earnings-card">
-              <b-card-body class="">
-                <b-row>
-                  <b-col md="3" sm="12" class="mb-2 mb-md-0">
-
-                    <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-primary'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
-                      </b-avatar>
-                      <div>
-                        <b-row>
-                          <b-col>
-                            <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
-                                අද දින ආයතනය ලාභ අලාභ වෙනස
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1">
-                                <div class="mt-50">Rs:
-                                  {{ ((total_hold_profit -
-                                    total_hold_loss).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                                </div>
-                              </h3>
-                            </div>
-                          </b-col>
-                        </b-row>
-                      </div>
-                    </div>
-                  </b-col>
-                </b-row>
-              </b-card-body>
-            </b-card>
-          </b-col>
-
-          <b-col lg="4" md="12" sm="12" class="mb-2 mb-md-0">
-            <b-card no-body class="earnings-card">
-              <b-card-body class="">
-                <b-row>
-                  <b-col lg="6" md="12" sm="12" class="mb-2 mb-md-0">
-
-                    <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-danger'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
-                      </b-avatar>
-                      <div>
-                        <b-row>
-                          <b-col>
-                            <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
-                                අද දින ආයතනය පාඩු රඳවා ගැනීම
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1 ">
-                                <div class="mt-50">Rs:
-                                  {{ (total_hold_loss).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
-                                </div>
-                              </h3>
-                            </div>
-                          </b-col>
-                        </b-row>
-                      </div>
-                    </div>
-                  </b-col>
-                </b-row>
-              </b-card-body>
-            </b-card>
-          </b-col> -->
 
           <b-col lg="4" md="12" sm="12" class="mb-2 mb-md-0">
             <b-card no-body class="earnings-card" @click="$router.push('/admin-cash')">
@@ -874,28 +416,28 @@
                   <b-col lg="12" md="12" sm="12" class="mb-2 mb-md-0">
 
                     <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-warning'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
+                      <b-avatar size="35" variant='light-warning'>
+                        <feather-icon size="20" icon='DollarSignIcon' />
                       </b-avatar>
                       <div>
                         <b-row>
                           <b-col>
                             <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
+                              <h4 class=" font-weight-bolder mb-0 ml-1">
                                 මුදල් ( {{ (today_payment_cash -
                                   today_payment_cash_expenditure).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,
                                     ",") }} )
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1 ">
+                              </h4>
+                              <h4 class="font-weight-bolder mb-0 ml-1 ">
                                 <div class="text-primary mt-50">Rs:
                                   {{ (today_payment_cash).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
 
-                                  <span class="text-danger mt-50 ml-5">Rs:
+                                  <div class="text-danger mt-50">Rs:
                                     {{ (today_payment_cash_expenditure).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                                     }}
-                                  </span>
+                                  </div>
                                 </div>
-                              </h3>
+                              </h4>
                             </div>
                           </b-col>
                         </b-row>
@@ -913,28 +455,28 @@
                   <b-col md="3" sm="12" class="mb-2 mb-md-0">
 
                     <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-success'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
+                      <b-avatar size="35" variant='light-success'>
+                        <feather-icon size="20" icon='DollarSignIcon' />
                       </b-avatar>
                       <div>
                         <b-row>
                           <b-col>
                             <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
+                              <h4 class=" font-weight-bolder mb-0 ml-1">
                                 කාඩ් ( {{ (today_payment_card -
                                   today_payment_card_expenditure).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,
                                     ",") }} )
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1 ">
+                              </h4>
+                              <h4 class="font-weight-bolder mb-0 ml-1 ">
                                 <div class="text-primary mt-50">Rs:
                                   {{ (today_payment_card).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
 
-                                  <span class="text-danger mt-50 ml-5">Rs:
+                                  <div class="text-danger mt-50">Rs:
                                     {{ (today_payment_card_expenditure).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                                     }}
-                                  </span>
+                                  </div>
                                 </div>
-                              </h3>
+                              </h4>
                             </div>
                           </b-col>
                         </b-row>
@@ -953,28 +495,28 @@
                   <b-col lg="12" md="12" sm="12" class="mb-2 mb-md-0">
 
                     <div class="d-sm-flex">
-                      <b-avatar size="45" variant='light-info'>
-                        <feather-icon size="30" icon='DollarSignIcon' />
+                      <b-avatar size="35" variant='light-info'>
+                        <feather-icon size="20" icon='DollarSignIcon' />
                       </b-avatar>
                       <div>
                         <b-row>
                           <b-col>
                             <div class="text-container">
-                              <h2 class=" font-weight-bolder mb-0 ml-1">
+                              <h4 class=" font-weight-bolder mb-0 ml-1">
                                 චෙක්පත් ( {{ (today_payment_cheque -
                                   today_payment_cheque_expenditure).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,
                                     ",") }} )
-                              </h2>
-                              <h3 class="font-weight-bolder mb-0 ml-1 ">
+                              </h4>
+                              <h4 class="font-weight-bolder mb-0 ml-1 ">
                                 <div class="text-primary mt-50">Rs:
                                   {{ (today_payment_cheque).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
 
-                                  <span class="text-danger mt-50 ml-5">Rs:
+                                  <div class="text-danger mt-50">Rs:
                                     {{ (today_payment_cheque_expenditure).toString().replace(/\B(?=(\d{3})+(?!\d))/g,
                                       ",") }}
-                                  </span>
+                                  </div>
                                 </div>
-                              </h3>
+                              </h4>
                             </div>
                           </b-col>
                         </b-row>
@@ -990,20 +532,20 @@
           <b-col lg="6" md="12" sm="12">
             <b-card no-body class="card-statistics">
               <b-card-body>
-                <h2 class="d-flex justify-content-center">අයිතම ගැණුම් / විකුණුම්</h2>
+                <h4 class="d-flex justify-content-center">අයිතම ගැණුම් / විකුණුම්</h4>
                 <b-row>
                   <b-col lg="6" md="12" sm="12" class="my-2 mb-md-0">
                     <b-media no-body @click="$router.push('/sale-order_list')">
                       <b-media-aside class="mr-2">
-                        <b-avatar size="48" variant="light-primary">
-                          <feather-icon size="24" icon="TrendingUpIcon" />
+                        <b-avatar size="35" variant="light-primary">
+                          <feather-icon size="20" icon="TrendingUpIcon" />
                         </b-avatar>
                       </b-media-aside>
                       <b-media-body class="my-auto">
-                        <h3 class="font-weight-bolder mb-0">
+                        <h4 class="font-weight-bolder mb-0">
                           අයිතම විකුණුම්
                           <!-- Sales -->
-                        </h3>
+                        </h4>
                         <h4 class="font-weight-bolder mb-0"> Rs: {{
                           (hardware_income).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</h4>
                       </b-media-body>
@@ -1012,15 +554,15 @@
                   <b-col lg="6" md="12" sm="12" class="my-2 mb-md-0">
                     <b-media no-body @click="$router.push('/order_list')">
                       <b-media-aside class="mr-2">
-                        <b-avatar size="48" variant="light-danger">
-                          <feather-icon size="24" icon="TrendingDownIcon" />
+                        <b-avatar size="35" variant="light-danger">
+                          <feather-icon size="20" icon="TrendingDownIcon" />
                         </b-avatar>
                       </b-media-aside>
                       <b-media-body class="my-auto">
-                        <h3 class="font-weight-bolder mb-0">
+                        <h4 class="font-weight-bolder mb-0">
                           අයිතම ගැණුම්
                           <!-- Purchase -->
-                        </h3>
+                        </h4>
                         <h4 class="font-weight-bolder mb-0">Rs: {{
                           (hardware_expenditure).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }} </h4>
                       </b-media-body>
@@ -1029,15 +571,15 @@
                   <b-col lg="6" md="12" sm="12" class="my-2 mb-md-0">
                     <b-media no-body @click="$router.push('/plastic-sale-order_list')">
                       <b-media-aside class="mr-2">
-                        <b-avatar size="48" variant="light-success">
-                          <feather-icon size="24" icon="TrendingUpIcon" />
+                        <b-avatar size="35" variant="light-success">
+                          <feather-icon size="20" icon="TrendingUpIcon" />
                         </b-avatar>
                       </b-media-aside>
                       <b-media-body class="my-auto">
-                        <h3 class="font-weight-bolder mb-0">
+                        <h4 class="font-weight-bolder mb-0">
                           ප්ලාස්ටික් අයිතම විකුණුම්
                           <!-- Plastic Sales -->
-                        </h3>
+                        </h4>
                         <h4 class="font-weight-bolder mb-0"> Rs: {{
                           (hardware_return_income).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }} </h4>
                       </b-media-body>
@@ -1046,16 +588,16 @@
                   <b-col lg="6" md="12" sm="12" class="my-2 mb-md-0">
                     <b-media no-body @click="$router.push('/plastic-order_list')">
                       <b-media-aside class="mr-2">
-                        <b-avatar size="48" variant="light-warning">
-                          <feather-icon size="24" icon="TrendingDownIcon" />
+                        <b-avatar size="35" variant="light-warning">
+                          <feather-icon size="20" icon="TrendingDownIcon" />
                         </b-avatar>
                       </b-media-aside>
                       <b-media-body class="my-auto">
-                        <h3 class="font-weight-bolder mb-0">
+                        <h4 class="font-weight-bolder mb-0">
                           <!-- Plastic විකුණුම් -->
                           ප්ලාස්ටික් අයිතම ගැණුම්
                           <!-- Plastic Purchase -->
-                        </h3>
+                        </h4>
                         <h4 class="font-weight-bolder mb-0"> Rs: {{
                           (return_hardware_expenditure).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }} </h4>
                       </b-media-body>
@@ -1068,20 +610,20 @@
           <b-col lg="6" md="12" sm="12">
             <b-card no-body class="card-statistics">
               <b-card-body @click="$router.push('/admin-expenses')">
-                <h2 class="d-flex justify-content-center">වියදම් ( Rs. {{
-                  (total_expenditure).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }})</h2>
+                <h4 class="d-flex justify-content-center">වියදම් ( Rs. {{
+                  (total_expenditure).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }})</h4>
                 <b-row>
                   <b-col lg="6" md="12" sm="12" class="my-2 mb-md-0">
                     <b-media no-body>
                       <b-media-aside class="mr-2">
-                        <b-avatar size="48" variant="light-info">
-                          <feather-icon size="24" icon="ArchiveIcon" />
+                        <b-avatar size="35" variant="light-info">
+                          <feather-icon size="20" icon="ArchiveIcon" />
                         </b-avatar>
                       </b-media-aside>
                       <b-media-body class="my-auto">
-                        <h3 class="font-weight-bolder mb-0">
+                        <h4 class="font-weight-bolder mb-0">
                           ආයතන වියදම
-                        </h3>
+                        </h4>
                         <h4 class="font-weight-bolder mb-0"> Rs: {{
                           (company_expenditure).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }} </h4>
                       </b-media-body>
@@ -1090,14 +632,14 @@
                   <b-col lg="6" md="12" sm="12" class="my-2 mb-md-0">
                     <b-media no-body>
                       <b-media-aside class="mr-2">
-                        <b-avatar size="48" variant="light-warning">
-                          <feather-icon size="24" icon="UsersIcon" />
+                        <b-avatar size="35" variant="light-warning">
+                          <feather-icon size="20" icon="UsersIcon" />
                         </b-avatar>
                       </b-media-aside>
                       <b-media-body class="my-auto">
-                        <h3 class="font-weight-bolder mb-0">
+                        <h4 class="font-weight-bolder mb-0">
                           කාරයමණ්ඩල වියදම
-                        </h3>
+                        </h4>
                         <h4 class="font-weight-bolder mb-0"> Rs: {{
                           (staff_expenditure).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }} </h4>
                       </b-media-body>
@@ -1106,14 +648,14 @@
                   <b-col lg="6" md="12" sm="12" class="my-2 mb-md-0">
                     <b-media no-body>
                       <b-media-aside class="mr-2">
-                        <b-avatar size="48" variant="light-danger">
-                          <feather-icon size="24" icon="TruckIcon" />
+                        <b-avatar size="35" variant="light-danger">
+                          <feather-icon size="20" icon="TruckIcon" />
                         </b-avatar>
                       </b-media-aside>
                       <b-media-body class="my-auto">
-                        <h3 class="font-weight-bolder mb-0">
+                        <h4 class="font-weight-bolder mb-0">
                           වාහන වියදම
-                        </h3>
+                        </h4>
                         <h4 class="font-weight-bolder mb-0"> Rs: {{
                           (vehicle_expenditure).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }} </h4>
                       </b-media-body>
@@ -1122,14 +664,14 @@
                   <b-col lg="6" md="12" sm="12" class="my-2 mb-md-0">
                     <b-media no-body>
                       <b-media-aside class="mr-2">
-                        <b-avatar size="48" variant="light-success">
-                          <feather-icon size="24" icon="ShoppingBagIcon" />
+                        <b-avatar size="35" variant="light-success">
+                          <feather-icon size="20" icon="ShoppingBagIcon" />
                         </b-avatar>
                       </b-media-aside>
                       <b-media-body class="my-auto">
-                        <h3 class="font-weight-bolder mb-0">
+                        <h4 class="font-weight-bolder mb-0">
                           වෙනත් වියදම
-                        </h3>
+                        </h4>
                         <h4 class="font-weight-bolder mb-0"> Rs: {{
                           (other_expenditure).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }} </h4>
                       </b-media-body>
@@ -1140,28 +682,27 @@
             </b-card>
           </b-col>
 
-          <b-col v-if="userData.id == 1" cols="12">
+          <b-col  cols="12">
             <b-card>
               <apex-line-chart />
             </b-card>
           </b-col>
-          <b-col v-if="userData.id == 1" cols="12">
+          <b-col  cols="12">
             <b-card>
               <apex-sell-line-chart />
             </b-card>
           </b-col>
-          <b-col v-if="userData.id == 1" cols="12">
+          <b-col  cols="12">
             <b-card>
               <apex-plastic-line-chart />
             </b-card>
           </b-col>
-          <b-col v-if="userData.id == 1" cols="12">
+          <b-col  cols="12">
             <b-card>
               <apex-plastic-sell-line-chart />
             </b-card>
           </b-col>
         </b-row>
-      </div>
     </div>
 
   </div>
@@ -1286,7 +827,6 @@ export default {
       store_sum: 0,
       amount_shop: 0,
       amount_store: 0,
-      userData: JSON.parse(localStorage.getItem('userData')),
       today: new Date().toISOString().slice(0, 10),
       yesterday: today.toISOString().slice(0, 10),
       lastday: last_date.toISOString().slice(0, 10),
@@ -1308,15 +848,9 @@ export default {
   async mounted() {
 
     window.addEventListener('keydown', this.handleKeydown);
-
-    if (JSON.parse(localStorage.getItem('userData')).admin_role == 'TBSAdmin' || JSON.parse(localStorage.getItem('userData')).admin_role == 'TBSAccountant') {
-      await this.checkAdmin()
       await this.getAdminDate()
       await this.dashboardSmss()
-    }
-    else {
-      this.localLogout()
-    }
+
 
   },
   beforeDestroy() {
@@ -1340,7 +874,6 @@ export default {
       try {
         this.isLoading = true
         await admin.cancelZero()
-        await this.checkAdmin()
         await this.getAdminDate()
         this.isLoading = false
       } catch (error) {
@@ -1365,7 +898,7 @@ export default {
           start_date: formattedStartDate,
           end_date: formattedEndDate,
         }
-        const status = (await admin.getAdminAllDashboards(JSON.parse(localStorage.getItem('userData')).id, this.payload))
+        const status = (await admin.getAdminAllDashboards(1, this.payload))
         this.today_view = status.data.today_view
         this.bank_amount = status.data.bank_card
         this.bank_total = status.data.bank_total
@@ -1449,7 +982,6 @@ export default {
       try {
         this.isLoading = true
         await admin.intermediaryNewRateUpdate()
-        await this.checkAdmin()
         await this.getAdminDate()
         this.isLoading = false
       } catch (error) {
@@ -1475,7 +1007,6 @@ export default {
       try {
         this.isLoading = true
         await admin.intermediaryOnRateUpdate()
-        await this.checkAdmin()
         this.isLoading = false
       } catch (error) {
         this.isLoading = false
@@ -1483,12 +1014,7 @@ export default {
     },
 
 
-    async checkAdmin() {
-      const response = await profile.getDeviceNumber(JSON.parse(localStorage.getItem('userData')).id)
-      if (JSON.parse(localStorage.getItem('userData')).device_number != response.data.data.device_number) {
-        this.localLogout()
-      }
-    },
+
 
     async TodayData() {
       try {
@@ -1564,11 +1090,6 @@ export default {
     },
 
 
-    async localLogout() {
-      localStorage.removeItem('userData')
-      localStorage.removeItem('isLoggedIn')
-      window.location = '/sarasavihw'
-    },
     async getAdminDate() {
       const status = (await admin.getAdminDate())
       this.today_date = status.data.date
@@ -1604,7 +1125,7 @@ export default {
         start_date: null,
         end_date: null,
       }
-      const status = (await admin.getAdminAllDashboards(JSON.parse(localStorage.getItem('userData')).id, this.payload))
+      const status = (await admin.getAdminAllDashboards(1, this.payload))
       this.today_view = status.data.today_view
       this.bank_amount = status.data.bank_card
       this.bank_total = status.data.bank_total
@@ -1750,9 +1271,9 @@ export default {
 }
 
 .notification-icon {
-  width: 55px;
-  height: 55px;
-  min-width: 55px;
+  width: 25px;
+  height: 25px;
+  min-width: 25px;
   border-radius: 50%;
   background: rgba(234, 84, 85, 0.12);
   color: #ea5455;
@@ -1762,19 +1283,18 @@ export default {
 }
 
 .details-text {
-  font-size: 15px;
+  font-size: 10px;
   margin-top: 4px;
   color: #6e6b7b;
 }
 
 .expiry-text {
-  font-size: 15px;
   font-weight: 600;
   color: #ea5455;
 }
 
 .notification-card h5 {
-  font-size: 18px;
+  font-size: 15px;
 }
 
 @import '@core/scss/vue/pages/page-misc.scss';

@@ -17,199 +17,12 @@
                   </h5>
                 </div>
               </div>
-
-              <!-- CENTER -->
-              <div class="center-section">
-                <span>📅 {{ currentDate }}</span>
-                <span class="mx-2">|</span>
-                <span>⏰ {{ currentTime }} </span>
-              </div>
             </div>
 
           </b-card>
         </b-col>
 
       </b-row>
-      <b-modal size="lg" id="modal-prevent-closing-lorry" centered ref="my-modal-lorry" title="Add New Vehicle"
-        ok-title="Submit" cancel-variant="outline-secondary" @show="resetModalLorry" @hidden="resetModalLorry"
-        @ok="handleOkLorry">
-        <form ref="form" @submit.stop.prevent="handleSubmitLorry">
-
-
-          <b-form-group label="Select Company">
-            <v-select v-model="lorry.company_id" label="label" :options="groups" :reduce="item => item.id"
-              class="custom-v-select" required />
-          </b-form-group>
-
-          <!-- Lorry Number -->
-          <b-form-group label="Vehicle Number" class="mb-5">
-            <b-form-input v-model="lorry.lorry_number" :state="lorry_number_status" required />
-          </b-form-group>
-        </form>
-      </b-modal>
-      <div class="m-2">
-        <b-row>
-          <b-col sm="12" md="6" lg="4">
-            <b-form-group label="Select Vehicle">
-              <v-select v-model="filters['lorry_number']" label="label" :options="vehicle_groups"
-                :reduce="item => item.id" required @input="addSubItemData" class="modern-select"
-                placeholder="🔍 Search Vehicles...">
-
-                <!-- Custom option rendering -->
-                <template #option="{ label, status }">
-                  <div :style="{
-                    backgroundColor: status == 6 ? 'transparent' : '#d6ecff',
-                    padding: '6px',
-                    borderRadius: '4px'
-                  }">
-                    {{ label }}
-                  </div>
-                </template>
-
-              </v-select>
-            </b-form-group>
-          </b-col>
-
-          <b-col v-if="selected_status != 6" sm="12" md="6" lg="4">
-            <b-row>
-              <b-col cols="9">
-                <b-form-group label="Select Company">
-                  <v-select v-model="company_id" label="label" :options="groups" :reduce="item => item.id" required
-                    class="modern-select" placeholder="🔍 Search Company...">
-                  </v-select>
-                </b-form-group>
-              </b-col>
-              <b-col cols="3">
-                <div class="mt-50">
-                  <b-button class="mt-2 modern-btn" id="toggle-btn-price" v-b-modal.modal-prevent-closing-price>
-                    <span class="align-middle"> Add</span>
-                  </b-button>
-                  <b-modal id="modal-prevent-closing-price" centered ref="my-modal-price" title="Add New Company"
-                    ok-title="Submit" cancel-variant="outline-secondary" @show="resetModalPrice"
-                    @hidden="resetModalPrice" @ok="handleOkPrice">
-                    <form ref="form" @submit.stop.prevent="handleSubmitPrice">
-
-                      <b-col sm="12" md="12">
-                        <b-form-group label="Company Name" label-for="company_name"
-                          invalid-feedback="User name required">
-                          <b-form-input ref="codeInput" id="company_name" v-model="company_name"
-                            :state="company_name_status" placeholder="Enter company name" required />
-                        </b-form-group>
-                      </b-col>
-
-
-                      <b-col sm="12" md="12">
-                        <b-form-group label="Address" label-for="address" invalid-feedback="Address is required">
-                          <b-form-input id="address" v-model="address" :state="address_status"
-                            placeholder="Enter Address" />
-                        </b-form-group>
-                      </b-col>
-
-                      <b-col sm="12" md="12">
-                        <b-form-group label="Mobile Number" label-for="phone"
-                          invalid-feedback="Mobile Number is required">
-                          <b-form-input id="phone" v-model="phone_no" :state="phone_no_status"
-                            placeholder="Enter mobile number" />
-                        </b-form-group>
-                      </b-col>
-                    </form>
-                  </b-modal>
-                </div>
-              </b-col>
-            </b-row>
-          </b-col>
-          <b-col v-else sm="12" md="6" lg="4">
-            <b-row>
-              <b-col cols="9">
-                <b-form-group label="Company Name" class="modern-group">
-                  <b-input-group class="modern-input-group">
-
-                    <b-input-group-prepend>
-                      <span class="input-icon">🏢</span>
-                    </b-input-group-prepend>
-
-                    <b-form-input disabled v-model="form.user_name" :state="user_name_status" class="modern-input"
-                      placeholder="Company name" />
-                  </b-input-group>
-                </b-form-group>
-              </b-col>
-              <b-col cols="3">
-                <div class="mt-50">
-                  <b-button class="mt-2 modern-btn" id="toggle-btn-price" v-b-modal.modal-prevent-closing-price>
-                    <span class="align-middle"> Add</span>
-                  </b-button>
-                  <b-modal id="modal-prevent-closing-price" centered ref="my-modal-price" title="Add New Company"
-                    ok-title="Submit" cancel-variant="outline-secondary" @show="resetModalPrice"
-                    @hidden="resetModalPrice" @ok="handleOkPrice">
-                    <form ref="form" @submit.stop.prevent="handleSubmitPrice">
-
-                      <b-col sm="12" md="12">
-                        <b-form-group label="Company Name" label-for="company_name"
-                          invalid-feedback="User name required">
-                          <b-form-input ref="codeInput" id="company_name" v-model="company_name"
-                            :state="company_name_status" placeholder="Enter company name" required />
-                        </b-form-group>
-                      </b-col>
-
-
-                      <b-col sm="12" md="12">
-                        <b-form-group label="Address" label-for="address" invalid-feedback="Address is required">
-                          <b-form-input id="address" v-model="address" :state="address_status"
-                            placeholder="Enter Address" />
-                        </b-form-group>
-                      </b-col>
-
-                      <b-col sm="12" md="12">
-                        <b-form-group label="Mobile Number" label-for="phone"
-                          invalid-feedback="Mobile Number is required">
-                          <b-form-input id="phone" v-model="phone_no" :state="phone_no_status"
-                            placeholder="Enter mobile number" />
-                        </b-form-group>
-                      </b-col>
-
-
-                      <b-col sm="12" md="12">
-                        <b-form-group label="Vehicle Number" label-for="vehicle"
-                          invalid-feedback="Vehicle Number is required">
-                          <b-form-input id="vehicle" v-model="vehicle_number" :state="vehicle_number_status"
-                            placeholder="Enter vehicle number" />
-                        </b-form-group>
-                      </b-col>
-                    </form>
-                  </b-modal>
-                </div>
-              </b-col>
-            </b-row>
-
-          </b-col>
-          <b-col sm="12" md="6" lg="4">
-            <b-form-group label="Driver Name">
-              <v-select :disabled="selected_status === 6" v-model="driver_id" :options="driver_groups" label="label"
-                class="modern-select" :reduce="item => item.id" required @input="addDriverData">
-
-                <!-- Custom option rendering -->
-                <template #option="{ label, status }">
-                  <div :style="{
-                    backgroundColor: status == 1 ? '#d6ecff' : 'transparent',
-                    padding: '6px',
-                    borderRadius: '4px'
-                  }">
-                    {{ label }}
-                  </div>
-                </template>
-
-              </v-select>
-            </b-form-group>
-          </b-col>
-
-          <b-col sm="12" md="12" lg="12">
-            <div class="my-1 d-flex justify-content-start ">
-              <b-button id="toggle-btn-price" class="modern-btn" @click="addNewOrder">
-                <span class="align-middle"> Add New Order</span>
-              </b-button>
-            </div>
-          </b-col>
-        </b-row>
         <b-row>
           <b-col md="12">
             <!-- Table Top -->
@@ -236,8 +49,7 @@
               <b-col cols="12">
                 <b-row>
                   <b-col sm="12" md="12" lg="6" xl="4" v-for="project in getData" :key="project.id" class="mb-2">
-                    <b-card class="custom-card" :class="project.active_status == 1 ? 'card-assigned' : 'card-pending'"
-                      @click="handleCardClick(project)">
+                    <b-card class="custom-card" :class="project.active_status == 1 ? 'card-assigned' : 'card-pending'">
                       <div class="card-inner">
 
                         <!-- Top Badge -->
@@ -318,7 +130,6 @@
             </b-row>
           </b-col>
         </b-row>
-      </div>
     </b-card>
   </div>
 </template>

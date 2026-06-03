@@ -1,22 +1,7 @@
 <template>
-  <div class="invoice-page">
 
-    <b-card>
-
-      <b-tabs class="my-1">
-
-        <!-- ALL EXPENSES -->
+      <b-tabs>
         <b-tab lazy :active="activeTab === '1'">
-
-          <template v-slot:title>
-            <span><strong>All Loans</strong></span>
-          </template>
-
-          <all-loans class="invoice-card" />
-
-        </b-tab>
-
-        <b-tab lazy :active="activeTab === '2'">
 
           <template v-slot:title>
             <span><strong>Supplier Loans</strong></span>
@@ -25,7 +10,7 @@
           <supplier-loans class="invoice-card" />
 
         </b-tab>
-        <b-tab lazy :active="activeTab === '3'">
+        <b-tab lazy :active="activeTab === '2'">
 
           <template v-slot:title>
             <span><strong>Company Loans</strong></span>
@@ -35,7 +20,7 @@
 
         </b-tab>
 
-        <b-tab lazy :active="activeTab === '4'">
+        <b-tab lazy :active="activeTab === '3'">
 
           <template v-slot:title>
             <span><strong>Staff Loans</strong></span>
@@ -47,10 +32,6 @@
 
 
       </b-tabs>
-
-    </b-card>
-
-  </div>
 </template>
 
 <script>
@@ -67,7 +48,6 @@ import {
 
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 
-import AllLoans from './all/index.vue'
 import SupplierLoans from './suppliers/index.vue'
 import StaffLoans from './staff/index.vue'
 import CompanyLoans from './companies/index.vue'
@@ -84,7 +64,6 @@ export default {
     BCard,
     BTab,
     BTabs,
-    AllLoans,
     SupplierLoans,
     StaffLoans,
     CompanyLoans,

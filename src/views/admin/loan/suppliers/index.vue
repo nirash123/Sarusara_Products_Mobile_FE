@@ -1,9 +1,6 @@
 <template>
   <div>
-
-    <b-card no-body>
-
-      <div class="m-2">
+      <div>
 
         <!-- ================= TOP SECTION ================= -->
         <b-row>
@@ -24,14 +21,6 @@
               <b-form-input v-model="filters['name_or_email']" class="d-inline-block modern-search mr-1"
                 placeholder="🔍 Search suppliers..." />
 
-              <!-- Add Loan Button -->
-              <b-button class="modern-btn single-line-text" variant="primary" id="toggle-btn-price"
-                v-ripple.400="'rgba(113, 102, 240, 0.15)'" v-b-modal.modal-prevent-closing-price>
-                <span class="align-middle">
-                  Get New Loan
-                </span>
-              </b-button>
-
             </div>
 
           </b-col>
@@ -40,121 +29,7 @@
 
       </div>
 
-      <!-- ================= ADD LOAN MODAL ================= -->
-      <b-modal size="lg" id="modal-prevent-closing-price" centered ref="my-modal-price" title="Add New Loan"
-        ok-title="Submit" cancel-variant="outline-secondary" @show="resetModalPrice" @hidden="resetModalPrice"
-        @ok="handleOkPrice">
-
-        <form ref="form" @submit.stop.prevent="handleSubmitPrice">
-
-          <!-- Supplier -->
-          <b-col sm="12" md="12">
-
-            <b-form-group label="Select Supplier">
-
-              <v-select v-model="supplier_id" label="label" :options="groups" :reduce="item => item"
-                class="custom-v-select" required />
-
-            </b-form-group>
-
-          </b-col>
-
-          <!-- Note -->
-          <b-col sm="12" md="12">
-
-            <b-form-group label="Note" label-for="note" invalid-feedback="Note is required">
-
-              <b-form-input id="note" v-model="note" :state="note_status" placeholder="Enter Note" />
-
-            </b-form-group>
-
-          </b-col>
-
-          <!-- Amount -->
-          <b-col sm="12" md="12">
-
-            <b-form-group label="Cash Amount" label-for="amount" invalid-feedback="Amount is required">
-
-              <b-form-input id="amount" v-model="amount" :state="amount_status" type="number"
-                placeholder="Enter Cash Amount" />
-
-            </b-form-group>
-
-          </b-col>
-          <b-col sm="12" md="12">
-
-            <b-form-group label="Card Amount" label-for="bank" invalid-feedback="Amount is required">
-
-              <b-form-input id="amount" v-model="bank" :state="bank_status" type="number"
-                placeholder="Enter Card Amount" />
-
-            </b-form-group>
-
-          </b-col>
-
-        </form>
-
-      </b-modal>
-
-      <!-- ================= PAY LOAN MODAL ================= -->
-      <b-modal size="lg" id="modal-prevent-closing-pay" centered ref="my-modal-pay" title="Pay Loan" ok-title="Submit"
-        cancel-variant="outline-secondary" @show="resetModalPay" @hidden="resetModalPay" @ok="handleOkPay">
-
-        <form ref="formPay" @submit.stop.prevent="handleSubmitPay">
-
-          <!-- Supplier -->
-          <b-col sm="12" md="12">
-
-            <b-form-group label="Supplier">
-
-              <b-form-input disabled v-model="user_name" :state="user_name_status" class="modern-input"
-                placeholder="Supplier name" />
-
-            </b-form-group>
-
-          </b-col>
-
-          <!-- Note -->
-          <b-col sm="12" md="12">
-
-            <b-form-group label="Note" label-for="pay_note" invalid-feedback="Note is required">
-
-              <b-form-input id="pay_note" v-model="pay_note" :state="pay_note_status" placeholder="Enter Note" />
-
-            </b-form-group>
-
-          </b-col>
-
-          <!-- Amount -->
-          <b-col sm="12" md="12">
-
-            <b-form-group label="Cash Amount" label-for="pay_amount" invalid-feedback="Amount is required">
-
-              <b-form-input id="pay_amount" v-model="pay_amount" :state="pay_amount_status" type="number"
-                placeholder="Enter Amount" />
-
-            </b-form-group>
-
-          </b-col>
-
-          <b-col sm="12" md="12">
-
-            <b-form-group label="Card Amount" label-for="pay_bank" invalid-feedback="Amount is required">
-
-              <b-form-input id="pay_bank" v-model="pay_bank" :state="pay_bank_status" type="number"
-                placeholder="Enter Amount" />
-
-            </b-form-group>
-
-          </b-col>
-
-
-        </form>
-
-      </b-modal>
-
-      <!-- ================= TABLE ================= -->
-      <b-row class="m-2">
+      <b-row>
 
         <b-col cols="12">
 
@@ -163,66 +38,44 @@
             <b-table ref="table" :current-page="currentPage" :fields="fields" :items="getUsers"
               :per-page="pagination.perPage" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
               :sort-direction="sortDirection" :filter="filter" :filter-included-fields="filterOn"
-              class="mobile_table_css" hover responsive>
+              hover responsive>
 
-              <!-- Supplier Name -->
-              <template #cell(supplier_name)="data">
-
-                <span class="text-primary cursor-pointer" v-b-modal.modal-prevent-closing-pay
-                  @click="addNewPay(data.item)">
-                  {{ data.item.supplier_name }}
-                </span>
-
-              </template>
-
-              <!-- Phone -->
-              <template #cell(phone_no)="data">
-
-                <span class="text-primary cursor-pointer" v-b-modal.modal-prevent-closing-pay
-                  @click="addNewPay(data.item)">
-                  {{ data.item.phone_no }}
-                </span>
-
-              </template>
-
-              <!-- Address -->
-              <template #cell(address)="data">
-
-                <span class="text-primary cursor-pointer" v-b-modal.modal-prevent-closing-pay
-                  @click="addNewPay(data.item)">
-                  {{ data.item.address }}
-                </span>
-
-              </template>
-
-              <!-- Loan -->
-              <template #cell(loan)="data">
-
-                <span class="text-danger cursor-pointer" v-b-modal.modal-prevent-closing-pay
-                  @click="addNewPay(data.item)">
-                  {{ data.item.loan }} ( Pay )
-                </span>
-
-              </template>
-
-              <!-- Actions -->
               <template #cell(actions)="data">
+                <b-card class="custom-card card-pending">
+                <div class="card-inner">
 
-                <b-button v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="outline-primary" :to="{
-                  name: 'view-supplier-details',
-                  params: { id: data.item.id }
-                }" class="btn-icon mr-50">
+                  <!-- Top Badge -->
+                  <div class="top-row">
+                    <span class="invoice-badge">
+                      {{ data.item.phone_no }}
+                    </span>
+                  </div>
 
-                  <feather-icon icon="EyeIcon" size="16" class="align-middle text-body" />
+                  <!-- Main Info -->
+                  <div class="main-content">
+                    <div class="lorry-number">
+                     👷 {{ data.item.supplier_name }}
+                    </div>
 
-                </b-button>
+                    <div class="supplier-name">
+                      {{ data.item.address }}
+                    </div>
+                  </div>
 
+                  <!-- Bottom Info -->
+                  <div class="bottom-row">
+                   
+
+                    <div class="info-item price">
+                      💰 {{ data.item.loan }} ( Pay )
+                    </div>
+                  </div>
+
+                </div>
+              </b-card>
               </template>
-
             </b-table>
-
           </b-overlay>
-
         </b-col>
 
         <!-- ================= EMPTY STATE ================= -->
@@ -292,9 +145,6 @@
         </b-col>
 
       </b-row>
-
-    </b-card>
-
   </div>
 </template>
 
@@ -448,25 +298,8 @@ export default {
 
       fields: [
         {
-          key: "supplier_name",
-          label: "supplier name",
-        },
-        {
-          key: "address",
-          label: "address",
-        },
-        {
-          key: "phone_no",
-          label: "mobile number",
-        },
-        {
-          key: "loan",
-          label: "Outstanding Loan",
-          sortable: true,
-        },
-        {
           key: "actions",
-          label: "actions",
+          label: "Supplier Loans",
         },
 
 
@@ -776,4 +609,333 @@ div#dropdown-1 .btn-outline-danger {
 button {
   height: 38px;
 }
+</style>
+<style lang="scss">
+@import "@core/scss/vue/libs/vue-select.scss";
+
+
+.header-card {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  border-radius: 12px;
+  color: white;
+  padding: 10px 15px;
+}
+
+/* Layout */
+.header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+/* Left */
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title h5 {
+  color: #fff;
+  font-weight: 600;
+  margin: 0;
+}
+
+.title small {
+  color: #dbeafe;
+}
+
+/* Back button */
+.back-btn {
+  background: linear-gradient(135deg, #1e3a8a, #1e3a8a);
+  border: none;
+  color: white;
+  border-radius: 10px;
+}
+
+/* Center */
+.center-section {
+  font-weight: 500;
+  color: #e0f2fe;
+}
+
+/* Right */
+.logout-icon {
+  cursor: pointer;
+  width: 26px;
+  height: 26px;
+  color: white;
+}
+
+/* Hover */
+.logout-icon:hover {
+  opacity: 0.7;
+}
+
+.modern-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 6px;
+}
+
+.modern-input {
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  transition: 0.25s ease;
+  font-weight: 500;
+}
+
+.modern-input:focus {
+  border-color: #7c8cff;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0);
+  background: #fff;
+}
+
+/* Modal content polish */
+.modal-content {
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #dfdeff, #7c8cff);
+  color: white;
+  font-weight: 600;
+}
+
+.modal-footer {
+  border-top: 1px solid #f1f1f1;
+}
+
+.modern-btn {
+  background: linear-gradient(135deg, #4e73df, #224abe);
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.modern-group label {
+  font-weight: 600;
+  font-size: 13px;
+  color: #ffffff;
+}
+
+.modern-input-group {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  transition: all 0.3s ease;
+}
+
+.modern-input-group:focus-within {
+  border-color: #7c8cff;
+  box-shadow: 0 0 0 3px rgba(124, 140, 255, 0.2);
+}
+
+.input-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  background: #eef2ff;
+  font-size: 16px;
+}
+
+.modern-input {
+  border: none !important;
+  background: transparent !important;
+  font-weight: 600;
+  color: #2c3e50;
+  height: 42px;
+}
+
+.modern-select .vs__dropdown-toggle {
+  border-radius: 12px;
+  padding: 8px;
+}
+
+div#dropdown-1 .btn-outline-danger {
+  border: none !important;
+}
+
+.custom-card {
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  border: none;
+}
+
+.custom-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Card States */
+.card-assigned {
+  background: linear-gradient(135deg, #d6ecff, #b3daff);
+}
+
+.card-pending {
+  background: linear-gradient(135deg, #d6ffaa, #b8f28a);
+}
+
+.custom-card {
+  border: none;
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  background: #ffffff;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover Magic */
+.custom-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+/* Assigned / Pending Styles */
+.card-assigned {
+  background: linear-gradient(135deg, #54ffb2, #ffffff);
+  border-left: 5px solid #28c76f;
+  box-shadow: 0 6px 18px rgba(40, 199, 111, 0.18);
+}
+
+.card-pending {
+  background: linear-gradient(135deg, #ffc87f, #ffffff);
+  border-left: 5px solid #ff9f43;
+  box-shadow: 0 6px 18px rgba(255, 159, 67, 0.18);
+}
+
+/* Inner Layout */
+.card-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Top Badge */
+.top-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.invoice-badge {
+  background: #7367f0;
+  color: white;
+  padding: 4px 10px;
+  font-size: 1.0rem;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+/* Main Content */
+.main-content {
+  text-align: center;
+}
+
+.lorry-number {
+  font-size: 1.0rem;
+  font-weight: 700;
+  color: #000000;
+}
+
+.supplier-name {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #000000;
+  margin-top: 4px;
+}
+
+/* Bottom Row */
+.bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* Info Items */
+.info-item {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.info-item.price {
+  color: #f80000;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+/* Subtle Glow Effect */
+.custom-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(120deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent);
+  transform: rotate(25deg);
+  transition: 0.5s;
+}
+
+.custom-card:hover::before {
+  left: 100%;
+}
+
+.per-page-selector {
+  width: 90px;
+}
+
+.single-line-text {
+  width: 180px;
+}
+
+.invoice-filter-select {
+  min-width: 190px;
+}
+
+::v-deep .vs__selected-options {
+  flex-wrap: nowrap;
+}
+
+::v-deep .vs__selected {
+  width: 100px;
+}
+
+button {
+  height: 38px;
+}
+
+.row-orange {
+  background-color: #ffa50033 !important;
+  /* light orange */
+}
+
+.row-green {
+  background-color: #39ff2733 !important;
+  /* light green */
+}
+
+
+@import '@core/scss/vue/libs/vue-flatpicker.scss';
 </style>

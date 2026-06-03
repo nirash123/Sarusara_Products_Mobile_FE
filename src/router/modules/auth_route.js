@@ -1,10 +1,9 @@
 export default [
     {
         path: '/',
-        name: 'login',
-        component: () => import('@/views/auth/login.vue'),
+        name: 'dashboard',
+        component: () => import('@/views/dashboard/index.vue'),
         meta: {
-            layout: 'full',
             redirectIfLoggedIn: true,
             noAuth: true,
         },
@@ -19,4 +18,5 @@ export default [
             noAuth: true,
         },
     },
+
 ]

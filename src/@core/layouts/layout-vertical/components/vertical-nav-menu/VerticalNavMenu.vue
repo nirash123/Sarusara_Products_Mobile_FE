@@ -24,12 +24,6 @@
               class="navbar-brand"
               to="/"
             >
-              <span class="brand-logo">
-                <b-img
-                  :src="appLogoImage"
-                  alt="logo"
-                />
-              </span>
               <h2 class="ml-1 text-white">
                 T B S
               </h2>
@@ -71,19 +65,11 @@
       tagname="ul"
       @ps-scroll-y="evt => { shallShadowBottom = evt.srcElement.scrollTop > 0 }"
     >
-    <div v-if="userData">
-      <div v-if="userData.admin_role == 'TBSAdmin'">
+      <div>
       <vertical-nav-menu-items
         :items="navMenuItemsAdmin"
         class="navigation navigation-main"
       />
-    </div>
-    <div v-if="userData.admin_role == 'TBSAccountant'">
-      <vertical-nav-menu-items
-        :items="navMenuItemsAccountant"
-        class="navigation navigation-main"
-      />
-    </div>
     </div>
       
     </vue-perfect-scrollbar>
@@ -93,7 +79,6 @@
 
 <script>
 import navMenuItemsAdmin from '@/navigation/vertical/admin/index'
-import navMenuItemsAccountant from '@/navigation/vertical/cashier/index'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import { BLink, BImg } from 'bootstrap-vue'
 import { provide, computed, ref } from '@vue/composition-api'
@@ -152,7 +137,6 @@ export default {
 
     return {
       navMenuItemsAdmin,
-      navMenuItemsAccountant,
       perfectScrollbarSettings,
       isVerticalMenuCollapsed,
       collapseTogglerIcon,
